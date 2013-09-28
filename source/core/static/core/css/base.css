@@ -29,6 +29,7 @@ body {
     height: 75px;
     padding: 15px 0;
     background: #171617;
+    box-shadow: 0 0 10px #000;
 }
 
 .page-header .brand {
@@ -39,7 +40,7 @@ body {
     text-indent: -10000px;
 }
 
-.page-content {
+.page-content, .page-content .content-column {
     height: 100%;
 }
 

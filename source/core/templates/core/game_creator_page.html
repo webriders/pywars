@@ -1,5 +1,11 @@
 {% extends 'core/base.html' %}
 
+{% load static %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'core/css/game_creator_page.css' %}" />
+{% endblock %}
+
 {% block page_class %}game-creator-page{% endblock %}
 
 {% block content %}
