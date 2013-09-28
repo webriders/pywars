@@ -52,9 +52,15 @@ class Game(models.Model):
 
         return self.ROLE_OBSERVER
 
-    def get_creator(self):
+    def get_player_1(self):
         try:
             return self.players.get(role=Player.ROLE_PLAYER_1)
+        except Player.DoesNotExist:
+            pass
+
+    def get_player_2(self):
+        try:
+            return self.players.get(role=Player.ROLE_PLAYER_2)
         except Player.DoesNotExist:
             pass
 
@@ -118,6 +124,9 @@ class Player(models.Model):
         verbose_name = _("Player")
         verbose_name_plural = _("Players")
         unique_together = ('game', 'role')  # There can be only one role per game
+
+    def __unicode__(self):
+        return self.name
 
 
 class GameRound(models.Model):

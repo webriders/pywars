@@ -4,12 +4,12 @@
 
 {% block content %}
     {% if game.is_started and user_role != game.ROLE_OBSERVER %}
-        Fight scene
+        {{ game.get_player_1 }} vs {{ game.get_player_2 }}
     {% elif user_role != game.ROLE_OBSERVER %}
         {% if user_role == game.ROLE_PLAYER_1 %}
-            {{ game.get_creator.name }} vs Waiting for oponent...
+            {{ game.get_player_1 }} vs Waiting for oponent...
         {% else %}
-            {{ game.get_creator.name }} vs
+            {{ game.get_player_1 }} vs
             <form method="post" action="{% url 'core-join-game-feeder' game.pk %}">
                 {% csrf_token %}
                 {{ join_game_form }}
