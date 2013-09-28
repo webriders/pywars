@@ -1,5 +1,6 @@
 from django.db import models, IntegrityError, transaction
 from django.db.models.signals import post_save
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from core.exceptions import GameException
 from emulator.services.emulator_service import EmulatorService
@@ -13,8 +14,10 @@ class Game(models.Model):
     ROLE_PLAYER_2 = 'player2'
     ROLE_OBSERVER = 'observer'
 
+    MAX_ROUNDS_COUNT = 12
+
     time_started = models.DateTimeField(verbose_name=_("Start time"), null=True, blank=True)
-    time_ended = models.DateTimeField(verbose_name=_("End time"), null=True, blank=True)
+    time_finished = models.DateTimeField(verbose_name=_("End time"), null=True, blank=True)
 
     class Meta:
         verbose_name = _("Game")
@@ -33,6 +36,8 @@ class Game(models.Model):
             self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1, name=name)
         elif players_count == 1:
             self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_2, name=name)
+            self.time_started = timezone.now()
+            self.save()
         else:
             raise GameException('Game is already started')
 
@@ -69,10 +74,31 @@ class Game(models.Model):
     def is_started(self):
         """
         Check if game is started.
-        Game considered to be started when there are 2 joined players with filled names
         :return: True if game is started
         """
-        return self.players.filter(name__isnull=False).count() == 2
+        return self.time_started is not None
+
+    def is_finished(self):
+        """
+        Check if games is ended
+        :return: True if game is ended
+        """
+        return self.time_ended is not None
+
+    def get_result(self):
+        """
+        Get game result
+        :return: Player instance if there is winner,
+        None if game was played in draw,
+        raise exception if game is not finished
+        """
+        if not self.is_finished():
+            raise GameException('Game is not finished')
+
+        try:
+            return self.players.get(is_winner=True)
+        except Player.DoesNotExist:
+            return None
 
     def get_new_rounds(self, last_round_number):
         """
@@ -82,8 +108,12 @@ class Game(models.Model):
         """
         return self.rounds.filter(number__gt=last_round_number)
 
-    def get_round(self, number):
-        return GameRound.get(game=self, number=number)
+    def get_current_round(self):
+        """
+        Get current Round instance
+        :return: Round instance
+        """
+        return self.rounds.order_by('-number')[0]
 
     def submit_code(self, player_id, code):
         """
@@ -110,12 +140,9 @@ class Player(models.Model):
     """
     Information about player id and his state
     """
-    ROLE_PLAYER_1 = 'player1'
-    ROLE_PLAYER_2 = 'player2'
-
     ROLE_CHOICES = (
-        (ROLE_PLAYER_1, "Player 1"),
-        (ROLE_PLAYER_2, "Player 2")
+        (Game.ROLE_PLAYER_1, "Player 1"),
+        (Game.ROLE_PLAYER_2, "Player 2")
     )
 
     game = models.ForeignKey('Game', verbose_name=_("Game"), related_name="players")
@@ -123,7 +150,8 @@ class Player(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=254)
 
     role = models.CharField(verbose_name=_("Role"), max_length=16, choices=ROLE_CHOICES)
-    health = models.IntegerField(default=100)
+    state = models.TextField(verbose_name=_("State"), null=True, blank=True)
+    is_winner = models.BooleanField(verbose_name=_("Is winner?"), default=False)
 
     class Meta:
         verbose_name = _("Player")
@@ -150,7 +178,7 @@ class GameRound(models.Model):
 
 class GameSnippet(models.Model):
     """
-    Code snippet uploaded by player for specified game
+    Code snippet uploaded by player for specified game round
     """
     game_round = models.ForeignKey('GameRound', verbose_name=_("Game round"), related_name='snippets')
     player = models.ForeignKey('Player', verbose_name=_("Player"), related_name='snippets')
@@ -168,23 +196,35 @@ def emulate_round(sender, **kwargs):
     Emulate code if all snippets for round was submitted
     """
     game_round = kwargs['instance'].game_round
+    game = game_round.game
 
     if game_round.snippets.count() == 2:
         service = EmulatorService()
 
-        player1 = game_round.game.get_player_1()
+        player1 = game.get_player_1()
         player1_code = game_round.snippets.get(player=player1)
 
-        player2 = game_round.game.get_player_2()
+        player2 = game.get_player_2()
         player2_code = game_round.snippets.get(player=player2)
 
-        game_round.scene, player1.state, player2.state = \
+        game_round.scene, player1.state, player2.state, winner = \
             service.emulate(player1_code, player2_code, player1.state, player2.state)
 
+        if winner > 0 or game_round.number == Game.MAX_ROUNDS_COUNT:
+            if winner == 1:
+                player1.is_winner = True
+            elif winner == 2:
+                player2.is_winner = True
+
+            game.time_finished = timezone.now()
+        else:
+            GameRound.objects.create(game=game_round.game, number=game_round.number+1)
+
         game_round.save()
+        game.save()
         player1.save()
         player2.save()
 
-        GameRound.objects.create(game=game_round.game, number=game_round.number+1)
+
 
 post_save.connect(emulate_round, sender=GameSnippet)
