@@ -5,6 +5,9 @@ Pywars.Fighter = function (name, order) {
   var stanceDelta = order == 1 ? 0 : -35;
   var hitDelta =  order == 1 ? 0 : -55;
 
+  var staticStates = ['waiting', 'blocking'];
+  var prevState;
+
   var sprites = {
     "images": [
       '/static/core/assets/' + name + '/stance-' + order + '.png',
@@ -12,6 +15,8 @@ Pywars.Fighter = function (name, order) {
       '/static/core/assets/' + name + '/kick-' + order + '.png',
       '/static/core/assets/' + name + '/hit-' + order + '.png',
       '/static/core/assets/' + name + '/a-stance-' + order + '.png',
+      '/static/core/assets/' + name + '/block-s-' + order + '.png',
+      '/static/core/assets/' + name + '/block-e-' + order + '.png'
     ],
 
     frames: [
@@ -25,24 +30,47 @@ Pywars.Fighter = function (name, order) {
       //hit
       [0, 0, 57, 127, 3, hitDelta, 0],[57, 0, 57, 127, 3, hitDelta, 0],[114, 0, 57, 127, 3, hitDelta, 0],[171, 0, 57, 127, 3, hitDelta, 0],
       //a-stance
-      [0, 0, 73, 129, 4, stanceDelta, 0],[73, 0, 73, 129, 4, stanceDelta, 0],[146, 0, 73, 129, 4, stanceDelta, 0],[219, 0, 73, 129, 4, stanceDelta, 0],[292, 0, 73, 129, 4, stanceDelta, 0],[365, 0, 73, 129, 4, stanceDelta, 0],[438, 0, 73, 129, 4, stanceDelta, 0],[511, 0, 73, 129, 4, stanceDelta, 0],[584, 0, 73, 129, 4, stanceDelta, 0],
+      [0, 0, 73, 129, 4, stanceDelta ,0],[73, 0, 73, 129, 4, stanceDelta, 0],[146, 0, 73, 129, 4, stanceDelta, 0],[219, 0, 73, 129, 4, stanceDelta, 0],[292, 0, 73, 129, 4, stanceDelta, 0],[365, 0, 73, 129, 4, stanceDelta, 0],[438, 0, 73, 129, 4, stanceDelta, 0],[511, 0, 73, 129, 4, stanceDelta, 0],[584, 0, 73, 129, 4, stanceDelta, 0],
+      //block-start
+      [0, 0, 57, 129, 5, stanceDelta ,0],[57, 0, 57, 129, 5, stanceDelta ,0],[114, 0, 57, 129, 5, stanceDelta ,0],
+      //block-end
+      [0, 0, 57, 129, 6, stanceDelta ,0],[57, 0, 57, 129, 6, stanceDelta ,0]
     ],
     animations: {
-      astance: [31, 39, "punch", 0.4],
       stance: [0, 8, "stance", 0.1],
-      punch: [9, 16, "kick", 0.4],
-      kick: [17, 26, "hit", 0.4],
-      hit: [27, 30, "astance", 0.4]
+      punching: [9, 16, "waiting", 0.4],
+      kicking: [17, 26, "waiting", 0.5],
+      being_hit: {
+        frames: [27,28,29,30,30,30,29,28],
+        next: "waiting",
+        speed: 0.4
+      },
+      waiting: [31, 39, "waiting", 0.4],
+      blocking: {
+        frames: [40,41,42,42,42,42,42,42],
+        next: "blocking_end",
+        speed: 0.4
+      },
+      blocking_end: [43, 44, "waiting", 0.4]
     }
   };
 
   var animation = new createjs.BitmapAnimation(new createjs.SpriteSheet(sprites));
 
-  this.play = function () {
-    animation.gotoAndPlay("punch");
-  };
-  this.stance = function () {
-    animation.gotoAndPlay("astance");
+  this.setState = function(state) {
+    if ($.inArray(state, staticStates) && prevState == state
+      || animation.currentAnimation == state) {
+      return;
+    }
+
+    if (animation.currentAnimation == 'blocking') {
+      animation.gotoAndPlay('blocking_end');
+    }
+
+    if (sprites.animations[state]){
+      animation.gotoAndPlay(state);
+      prevState = state;
+    }
   };
 
   this.getAnimation = function() {
