@@ -1,7 +1,8 @@
-Pywars.Fighter = function (name, order) {
-  name = name || 'scorpion';
+pywars = pywars || {};
+pywars.Fighter = function (playerName, order) {
   order = this.order = order || 1;
-
+  this.playerName = playerName || 'Player 1';
+  var skin =  'scorpion';
   var stanceDelta = order == 1 ? 0 : -35;
   var hitDelta =  order == 1 ? 0 : -55;
 
@@ -10,15 +11,14 @@ Pywars.Fighter = function (name, order) {
 
   var sprites = {
     "images": [
-      '/static/core/assets/' + name + '/stance-' + order + '.png',
-      '/static/core/assets/' + name + '/punch-' + order + '.png',
-      '/static/core/assets/' + name + '/kick-' + order + '.png',
-      '/static/core/assets/' + name + '/hit-' + order + '.png',
-      '/static/core/assets/' + name + '/a-stance-' + order + '.png',
-      '/static/core/assets/' + name + '/block-s-' + order + '.png',
-      '/static/core/assets/' + name + '/block-e-' + order + '.png'
+      '/static/core/assets/' + skin + '/stance-' + order + '.png',
+      '/static/core/assets/' + skin + '/punch-' + order + '.png',
+      '/static/core/assets/' + skin + '/kick-' + order + '.png',
+      '/static/core/assets/' + skin + '/hit-' + order + '.png',
+      '/static/core/assets/' + skin + '/a-stance-' + order + '.png',
+      '/static/core/assets/' + skin + '/block-s-' + order + '.png',
+      '/static/core/assets/' + skin + '/block-e-' + order + '.png'
     ],
-
     frames: [
       // x, y, width, height, imageIndex, regX, regY
       //stance
