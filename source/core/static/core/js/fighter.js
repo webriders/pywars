@@ -58,8 +58,7 @@ pywars.Fighter = function (playerName, order) {
   var animation = new createjs.BitmapAnimation(new createjs.SpriteSheet(sprites));
 
   this.setState = function(state) {
-    if ($.inArray(state, staticStates) && prevState == state
-      || animation.currentAnimation == state) {
+    if ($.inArray(state, staticStates) != -1 && prevState == state) {
       return;
     }
 

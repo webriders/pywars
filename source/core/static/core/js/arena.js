@@ -16,6 +16,9 @@ pywars.Arena = new function () {
   var postponed = [];
   var $pl1health;
   var $pl2health;
+  var $canvas;
+
+  var newGame = true;
 
   function initTimer(scenario) {
     if (timer) {
@@ -24,11 +27,15 @@ pywars.Arena = new function () {
     }
 
     timer = setInterval(function () {
-      step += 1;
       onTick(scenario,step);
-      if (step == 14) {
-        step = 0
+      step += 1;
+
+      if (step > scenario.lastTick) {
+        $canvas.trigger('scenario.end');
+        clearInterval(timer);
+        step = 0;
       }
+
     }, TICKER_DELAY)
   }
 
@@ -75,12 +82,20 @@ pywars.Arena = new function () {
     }
   };
 
+  function showSplash() {
+    $('.canvas-container').append('<img src="/static/core/assets/fight.gif" class="fight" />');
+    setTimeout(function(){
+      $('.canvas-container .fight').remove()
+    },1000);
+    newGame = false;
+  }
+
   this.initStage = function () {
     document.getElementById(CANVAS_ID).width = CANVAS_WITH;
     document.getElementById(CANVAS_ID).height = CANVAS_HEIGHT;
     $pl1health = $('.canvas-container .player-1 .health div');
     $pl2health = $('.canvas-container .player-2 .health div');
-
+    $canvas = $('#' + CANVAS_ID);
     stage = new createjs.Stage(CANVAS_ID);
 
     createjs.Ticker.setFPS(30);
@@ -102,10 +117,20 @@ pywars.Arena = new function () {
   };
 
   this.play = function (scenario) {
-    $('.canvas-container').append('<img src="/static/core/assets/fight.gif" class="fight" />');
-    setTimeout(function(){
-      $('.canvas-container .fight').remove()
-    },1000);
+    var lastTick = 0;
+
+    for (var i in scenario) {
+      if (scenario.hasOwnProperty(i)){
+        lastTick = Math.max(parseInt(i), lastTick);
+      }
+    }
+
+    scenario.lastTick = lastTick;
+
+    if (newGame) {
+      showSplash()
+    }
+
     initTimer(scenario);
   };
 
