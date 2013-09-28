@@ -3,6 +3,8 @@
 {% load static %}
 
 {% block static %}
+    {{ block.super }}
+
     <script src="{% static 'core/js/easeljs-0.7.0.min.js' %}"></script>
     <script src="{% static 'core/js/arena.js' %}"></script>
     <script src="{% static 'core/js/fighter.js' %}"></script>

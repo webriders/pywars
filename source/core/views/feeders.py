@@ -1,11 +1,13 @@
+import json
 from django.http import HttpResponse
-from django.views.generic import View
+from django.views.generic import View, DetailView
+from core.models import Game
 
 
-__all__ = ['new_rounds_feed']
+__all__ = ['new_rounds_feed', 'game_state_feed']
 
 
-class NewRoundsView(View):
+class NewRoundsFeed(View):
     http_method_names = ['get']
 
     def get(self, request, *args, **kwargs):
@@ -23,5 +25,20 @@ class NewRoundsView(View):
 
         #return HttpResponse(json.dumps(rounds), content_type='application/json')
 
-new_rounds_feed = NewRoundsView.as_view()
+new_rounds_feed = NewRoundsFeed.as_view()
 
+
+class GameStateFeed(DetailView):
+    model = Game
+
+    def get(self, request, *args, **kwargs):
+        game = self.get_object()
+
+        state = {
+            'state': 'round' if game.is_started() else 'waiting',
+            'round': 0
+        }
+
+        return HttpResponse(json.dumps(state), content_type='application/json')
+
+game_state_feed = GameStateFeed.as_view()

@@ -1,0 +1,1 @@
+pywars = window.pywars || {};
