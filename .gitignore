@@ -1,0 +1,6 @@
+/var/media/
+/var/static/
+/conf/settings/local.py
+*.pyc
+staticfiles
+.idea

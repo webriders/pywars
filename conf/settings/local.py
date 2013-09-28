@@ -1,1 +1,0 @@
-# Put here your local settings (database, email backend, etc.)
