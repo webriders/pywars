@@ -1,6 +1,17 @@
 {% extends 'core/base.html' %}
 
+{% load static %}
+
 {% block page_class %}game-page{% endblock %}
+
+{% block static %}
+    {{ block.super }}
+
+    <script>
+        pywars.game.stateUrl = "{% url 'core-game-state-feed' game.pk %}";
+        pywars.game.init();
+    </script>
+{% endblock %}
 
 {% block content %}
     {% if game.is_started and user_role != game.ROLE_OBSERVER %}
