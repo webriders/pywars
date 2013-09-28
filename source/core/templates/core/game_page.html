@@ -1,10 +1,49 @@
 {% extends 'core/base.html' %}
 
+{% load static %}
+
 {% block page_class %}game-page{% endblock %}
+
+{% block static %}
+    {{ block.super }}
+
+    <link rel="stylesheet" href="{% static 'core/css/game_page.css' %}" />
+    <link rel="stylesheet" href="{% static 'libs/codemirror/codemirror.css' %}" />
+    <link rel="stylesheet" href="{% static 'libs/codemirror/themes/ambiance.css' %}" />
+
+    <script src="{% static 'core/js/game.js' %}"></script>
+    <script src="{% static 'libs/codemirror/codemirror.js' %}"></script>
+    <script>
+        $(function() {
+            pywars.game.stateUrl = "{% url 'core-game-state-feed' game.pk %}";
+            pywars.game.init();
+        });
+    </script>
+{% endblock %}
 
 {% block content %}
     {% if game.is_started and user_role != game.ROLE_OBSERVER %}
-        {{ game.get_player_1 }} vs {{ game.get_player_2 }}
+        <section id="game-field" class="game-field">
+            <form class="game-editor">
+                <textarea>while True:
+	event = get_current_event()
+
+    if event == 'kick':
+		kick()
+		punch()
+
+    elif event == 'punch':
+    	kick()
+        punch()
+
+    elif event == 'block':
+    	punch()
+        kick()
+                </textarea>
+                <input type="submit" value="Next round" />
+            </form>
+            <div class="game-player"></div>
+        </section>
     {% elif user_role != game.ROLE_OBSERVER %}
         {% if user_role == game.ROLE_PLAYER_1 %}
             {{ game.get_player_1 }} vs Waiting for oponent...
