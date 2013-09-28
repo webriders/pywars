@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
-from django.views.generic import TemplateView
 
 urlpatterns = patterns(
     'core.views',
 
-    url(r'^$', TemplateView.as_view(template_name='core/game_creator_page.html')),
+    url(r'^$', 'start_game_page', name='core-start-game-page'),
+    url(r'^game/(?P<pk>\d+)/$', 'game_page', name='core-game-page')
 )

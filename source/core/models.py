@@ -91,7 +91,7 @@ class Player(models.Model):
         (ROLE_PLAYER_2, "Player 2")
     )
 
-    game = models.ForeignKey('Game', verbose_name=_("Game"), related_name="+")
+    game = models.ForeignKey('Game', verbose_name=_("Game"), related_name="players")
     ident = models.CharField(verbose_name=_("Player ID"), max_length=254)
     name = models.CharField(verbose_name=_("Name"), max_length=254)
 
