@@ -7,11 +7,11 @@ Pywars.Fighter = function (name, order) {
 
   var sprites = {
     "images": [
-      '/assets/' + name + '/stance-' + order + '.png',
-      '/assets/' + name + '/punch-' + order + '.png',
-      '/assets/' + name + '/kick-' + order + '.png',
-      '/assets/' + name + '/hit-' + order + '.png',
-      '/assets/' + name + '/a-stance-' + order + '.png',
+      '/static/core/assets/' + name + '/stance-' + order + '.png',
+      '/static/core/assets/' + name + '/punch-' + order + '.png',
+      '/static/core/assets/' + name + '/kick-' + order + '.png',
+      '/static/core/assets/' + name + '/hit-' + order + '.png',
+      '/static/core/assets/' + name + '/a-stance-' + order + '.png',
     ],
 
     frames: [
