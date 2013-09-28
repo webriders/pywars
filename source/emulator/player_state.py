@@ -14,7 +14,7 @@ class PlayerState(object):
         :param json: is specified load state from JSON
         """
         assert type(name) in (str, unicode)
-        assert type(action_source) is types.GeneratorType
+        assert hasattr(action_source, 'next')
 
         self.name = name
         self.action_source = action_source

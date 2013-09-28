@@ -6,9 +6,13 @@ class Action(object):
     Base class for defining action
     """
     duration = 0
+    name = 'unknown'
 
     def __init__(self):
         self.tick = 0
+
+    def __str__(self):
+        return self.name
 
 
 class Rule(object):
