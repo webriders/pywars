@@ -1,6 +1,8 @@
-from django.db import models, IntegrityError
+from django.db import models, IntegrityError, transaction
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from core.exceptions import GameException
+from emulator.services.emulator_service import EmulatorService
 
 
 class Game(models.Model):
@@ -158,3 +160,31 @@ class GameSnippet(models.Model):
         verbose_name = _("Code snippet")
         verbose_name_plural = _("Code snippets")
         unique_together = ('game_round', 'player',)  # There should be one snippet within round per player
+
+
+@transaction.commit_on_success
+def emulate_round(sender, **kwargs):
+    """
+    Emulate code if all snippets for round was submitted
+    """
+    game_round = kwargs['instance'].game_round
+
+    if game_round.snippets.count() == 2:
+        service = EmulatorService()
+
+        player1 = game_round.game.get_player_1()
+        player1_code = game_round.snippets.get(player=player1)
+
+        player2 = game_round.game.get_player_2()
+        player2_code = game_round.snippets.get(player=player2)
+
+        game_round.scene, player1.state, player2.state = \
+            service.emulate(player1_code, player2_code, player1.state, player2.state)
+
+        game_round.save()
+        player1.save()
+        player2.save()
+
+        GameRound.objects.create(game=game_round.game, number=game_round.number+1)
+
+post_save.connect(emulate_round, sender=GameSnippet)
