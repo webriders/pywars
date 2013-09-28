@@ -8,11 +8,11 @@ class StartGameForm(forms.Form):
     """
     player_username = forms.CharField(max_length=254)
 
-    def save(self, request):
+    def save(self, player_id):
         """
-        :params request: Django request object
-        :type request: HttpRequest
+        :param player_id: Who does create game?
+        :type player_id: basestring
         """
         new_game = Game.objects.create()
-        new_game.join_game(request.session.session_key, self.cleaned_data['player_username'])
+        new_game.join_game(player_id, self.cleaned_data['player_username'])
         return new_game

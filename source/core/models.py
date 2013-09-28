@@ -1,5 +1,6 @@
 from django.db import models, IntegrityError
 from django.utils.translation import ugettext_lazy as _
+from core.exceptions import GameException
 
 
 class GameManager(models.Manager):
@@ -10,6 +11,10 @@ class Game(models.Model):
     """
     Information about game
     """
+    ROLE_PLAYER_1 = 'player1'
+    ROLE_PLAYER_2 = 'player2'
+    ROLE_OBSERVER = 'observer'
+
     time_started = models.DateTimeField(verbose_name=_("Start time"), null=True, blank=True)
     time_ended = models.DateTimeField(verbose_name=_("End time"), null=True, blank=True)
 
@@ -26,23 +31,40 @@ class Game(models.Model):
         :param name: player name
         :return: Player instance
         """
+        players_count = self.players.count()
+
+        if players_count == 0:
+            self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1, name=name)
+        elif players_count == 1:
+            self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_2, name=name)
+        else:
+            raise GameException('Game is already started')
+
+    def get_role_for(self, player_id):
+        """
+        Returns role for par
+        """
         try:
-            return Player.objects.get(game=self, ident=player_id)  # Already joined as player, just return player
+            return self.players.get(ident=player_id).role
         except Player.DoesNotExist:
             pass
 
         players_count = self.players.count()
 
         if players_count == 0:
-            # First player
-            return Player.objects.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1)
+            return self.ROLE_PLAYER_1
         elif players_count == 1:
-            # Second player
-            return Player.objects.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1)
-        else:
-            raise Exception('Game is already started')
+            return self.ROLE_PLAYER_2
 
-    def is_game_started(self):
+        return self.ROLE_OBSERVER
+
+    def get_creator(self):
+        try:
+            return self.players.get(role=Player.ROLE_PLAYER_1)
+        except Player.DoesNotExist:
+            pass
+
+    def is_started(self):
         """
         Check if game is started.
         Game considered to be started when there are 2 joined players with filled names
@@ -64,7 +86,7 @@ class Game(models.Model):
         :param player_id: string containing player ID
         :param code: string containing code
         """
-        if self.is_game_started() is False:
+        if self.is_started() is False:
             raise Exception('Game is not started')
 
         try:
