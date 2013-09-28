@@ -19,20 +19,16 @@ class Game(models.Model):
         verbose_name = _("Game")
         verbose_name_plural = _("Games")
 
-    def join_game(self, player_id):
+    def join_game(self, player_id, name):
         """
-        Join to game with specified player ID
+        Join to game with specified player ID and name
         :param player_id: string containing player ID
-        :return: Player or Observer instance
+        :param name: player name
+        :return: Player instance
         """
         try:
-            return self.players.get(ident=player_id)  # Already joined as player, just return player
+            return Player.objects.get(game=self, ident=player_id)  # Already joined as player, just return player
         except Player.DoesNotExist:
-            pass
-
-        try:
-            return self.observers.get(ident=player_id)  # Already joined as observer. just return observer
-        except Observer.DoesNotExist:
             pass
 
         players_count = self.players.count()
@@ -44,8 +40,7 @@ class Game(models.Model):
             # Second player
             return Player.objects.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1)
         else:
-            # Observer
-            return Observer.objects.create(game=self, ident=player_id)
+            raise Exception('Game is already started')
 
     def is_game_started(self):
         """
@@ -84,26 +79,7 @@ class Game(models.Model):
             raise Exception('Code for this round was already submitted')
 
 
-class Member(models.Model):
-    """
-    Abstract class for defining game members
-    """
-    game = models.ForeignKey('Game', verbose_name=_("Game"), related_name="+")
-    ident = models.CharField(verbose_name=_("Player ID"), max_length=254)
-    name = models.CharField(verbose_name=_("Name"), max_length=254, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-    def set_name(self, name):
-        """
-        Set member's name
-        """
-        self.name = name
-        self.save()
-
-
-class Player(Member):
+class Player(models.Model):
     """
     Information about player id and his state
     """
@@ -115,6 +91,10 @@ class Player(Member):
         (ROLE_PLAYER_2, "Player 2")
     )
 
+    game = models.ForeignKey('Game', verbose_name=_("Game"), related_name="+")
+    ident = models.CharField(verbose_name=_("Player ID"), max_length=254)
+    name = models.CharField(verbose_name=_("Name"), max_length=254, null=True, blank=True)
+
     role = models.CharField(verbose_name=_("Role"), max_length=16, choices=ROLE_CHOICES)
     health = models.IntegerField(default=100)
 
@@ -122,16 +102,6 @@ class Player(Member):
         verbose_name = _("Player")
         verbose_name_plural = _("Players")
         unique_together = ('game', 'role')  # There can be only one role per game
-
-
-class Observer(Member):
-    """
-    Information about observer
-    """
-
-    class Meta:
-        verbose_name = _("Observer")
-        verbose_name_plural = _("Observers")
 
 
 class GameRound(models.Model):
