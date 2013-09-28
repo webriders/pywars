@@ -1,0 +1,18 @@
+body {
+    background: #1d1d1d;
+}
+
+.page-header {
+    width: 100%;
+    height: 75px;
+    padding: 20px 0;
+    background: #171617;
+}
+
+.page-header .brand {
+    margin: 0 auto;
+    width: 390px;
+    height: 75px;
+    background: url(../img/brand.png) no-repeat;
+    text-indent: -10000px;
+}
