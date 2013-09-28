@@ -52,7 +52,7 @@
     float: right;
     height: 100%;
     width: 70%;
-    background: url(../assets/arenas/arena-1.jpg) no-repeat;
+    background: url(../assets/arenas/arena-1.jpg) no-repeat center 55%;
 
     box-sizing: border-box;
     -moz-box-sizing: border-box;

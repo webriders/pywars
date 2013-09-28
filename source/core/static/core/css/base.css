@@ -30,6 +30,8 @@ body {
     padding: 15px 0;
     background: #171617 url(../img/header_background.png);
     box-shadow: 0 0 10px #000;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    z-index: 3;
 }
 
 .page-header .brand {
