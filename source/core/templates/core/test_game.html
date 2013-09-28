@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block static %}
+    <script src="{% static 'core/js/easeljs-0.7.0.min.js' %}"></script>
+    <script src="{% static 'core/js/arena.js' %}"></script>
+    <script src="{% static 'core/js/fighter.js' %}"></script>
+    <style>
+        #stage {
+            background: grey;
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <canvas id="stage"></canvas>
+    <script src="{% static 'core/js/init-fighters.js' %}"></script>
+{% endblock %}
