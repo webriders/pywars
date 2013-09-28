@@ -10,7 +10,7 @@
             {{ game.get_player_1 }} vs Waiting for oponent...
         {% else %}
             {{ game.get_player_1 }} vs
-            <form method="post" action="{% url 'core-join-game-feeder' game.pk %}">
+            <form method="post" action="{% url 'core-join-game-action' game.pk %}">
                 {% csrf_token %}
                 {{ join_game_form }}
                 <input type="submit" value="Join game" />
