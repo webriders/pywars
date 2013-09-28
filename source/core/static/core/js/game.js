@@ -5,36 +5,18 @@ pywars.game = {
     stateUrl: '', // will be defined inside template
 
     init: function() {
-        this.state = 'waiting';
+        this.field = $('#game-field');
+        this.editor = this.field.find('.game-editor textarea');
 
-        var self = this;
-        setInterval(function() { self.updateState() }, 3 * 1000);
+        this.initEditor();
     },
 
-    updateState: function() {
-        var self = this;
-
-        $.get(this.stateUrl, function(data) {
-            if (self.state == 'waiting' && data.state == 'round')
-                self.startGame();
-            else if (self.state == 'round' && data.state == 'finish')
-                self.finishGame();
-            else
-                self.renderRound(data.roundNumber);
-
-            self.state = data.state;
+    initEditor: function() {
+        CodeMirror.fromTextArea(this.editor[0], {
+            lineNumbers: true,
+            theme: 'ambiance',
+            width: '100%',
+            height: '100%'
         });
-    },
-
-    startGame: function() {
-        console.log("Start game....");
-    },
-
-    renderRound: function(roundNumber) {
-
-    },
-
-    finishGame: function() {
-
     }
 };
