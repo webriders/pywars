@@ -1,0 +1,93 @@
+import json
+import types
+from emulator.rules import Action, InitialAction
+
+
+__all__ = ['PlayerState']
+
+
+class PlayerState(object):
+    def __init__(self, name, action_source, json=None):
+        """
+        :param name: string with player's name (useful for debug)
+        :param action_source: generator instance, that will be used to get actions for player
+        :param json: is specified load state from JSON
+        """
+        assert type(name) in (str, unicode)
+        assert type(action_source) is types.GeneratorType
+
+        self.name = name
+        self.action_source = action_source
+        self.action = InitialAction()
+        self.health = 100
+        self._queued_action = None
+        self._queued_health = None
+        self._health_callback = None
+        self._action_callback = None
+
+        if json is not None:
+            self.from_json(json)
+
+    def __str__(self):
+        return self.name
+
+    def from_json(self, json_data):
+        """
+        Reload state from JSON
+        :param json: string with valid JSON data
+        """
+        assert type(json_data) in (str, unicode)
+
+        data = json.loads(json_data)
+        self.health = data['health']
+
+    def to_json(self):
+        """
+        Serialize state to json
+        """
+        return json.dumps({'health': self.health})
+
+    def register_callbacks(self, health_callback, action_callback):
+        """
+        Add callbacks that will be called when state is changed
+        :param health_callback: callable that will be called on health changes
+        :param action_callback: callable that will be called on action changes
+        """
+        self._health_callback = health_callback
+        self._action_callback = action_callback
+
+    def queue_damage(self, value):
+        """
+        Tell to change health value (health-value)
+        :param value: number of points to decrease from health
+        """
+        assert type(value) is int
+
+        self._queued_health = self.health - value
+
+    def queue_action(self, action):
+        """
+        Tell what action to perform in next tick
+        :param action: Action instance
+        """
+        assert isinstance(action, Action)
+
+        self._queued_action = action
+
+    def finish(self):
+        """
+        Perform all queued operations
+        """
+        if self._queued_health is not None:
+            self.health = self._queued_health
+            if self._health_callback is not None:
+                self._health_callback(self)
+
+        if self._queued_action is not None:
+            self.action = self._queued_action
+
+            if self._action_callback is not None:
+                self._action_callback(self)
+
+        self._queued_health = None
+        self._queued_action = None

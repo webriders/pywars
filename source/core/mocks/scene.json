@@ -95,10 +95,10 @@
             "duration": 2
         }
     ],
-    "14": [
+    "13": [
         {
             "type": "health",
-            "player1": 90,
+            "player1": 95,
             "player2": 100
         },
         {
@@ -106,20 +106,20 @@
             "player": 1,
             "state": "being_hit",
             "duration": 1
+        }
+    ],
+    "14": [
+        {
+            "type": "frame",
+            "player": 1,
+            "state": "punching",
+            "duration": 2
         },
         {
             "type": "frame",
             "player": 2,
             "state": "kicking",
             "duration": 4
-        }
-    ],
-    "15": [
-        {
-            "type": "frame",
-            "player": 1,
-            "state": "punching",
-            "duration": 2
         }
     ]
 }

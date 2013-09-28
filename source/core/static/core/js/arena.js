@@ -14,6 +14,10 @@ Pywars.Arena = new function() {
     document.getElementById(CANVAS_ID).width = CANVAS_WITH;
     document.getElementById(CANVAS_ID).height = CANVAS_HEIGHT;
     stage = new createjs.Stage(CANVAS_ID);
+
+    createjs.Ticker.setFPS(30);
+    createjs.Ticker.useRAF = true;
+    createjs.Ticker.addEventListener("tick", tick);
   };
 
   this.addFighter = function(fighter) {
@@ -24,11 +28,6 @@ Pywars.Arena = new function() {
     players.push(fighter);
     fighter.stance()
   };
-
-  createjs.Ticker.setFPS(30);
-  createjs.Ticker.useRAF = true;
-  createjs.Ticker.addEventListener("tick", tick);
-
 
   function tick(event) {
     stage.update(event);
