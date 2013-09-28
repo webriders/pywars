@@ -3,24 +3,36 @@
 <head>
     {% load static %}
 
-    <title>{% block title %}PyWars{% endblock %}</title>
+    <title>PyWars</title>
 
     <link rel="stylesheet" href="{% static 'core/css/reset.css' %}" />
     <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/game_creator_page.css' %}" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
     {% block static %}
     {% endblock %}
 </head>
 <body>
-    <div class="page-container">
+    <div class="page-container {% block page_class %}{% endblock %}">
         <header class="page-header">
             <h1 class="brand">PyWars</h1>
         </header>
         <section class="page-content">
-            {% block content %}{% endblock %}
+            <div class="content-column">
+                {% block content %}{% endblock %}
+            </div>
         </section>
         <footer class="page-footer">
-            {% block footer %}{% endblock %}
+            <div class="content-column">
+                <div class="about">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </div>
+                <div class="copyright">
+                    Webriders Uno &copy Django Dash 2013
+                </div>
+            </div>
         </footer>
     </div>
 </body>

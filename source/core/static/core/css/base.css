@@ -1,11 +1,33 @@
+html, body {
+    height: 100%;
+}
+
 body {
     background: #1d1d1d;
+    font: 12px verdana, sans-serif;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.content-column {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.page-container {
+    height: 100%;
+    padding-top: 105px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .page-header {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 75px;
-    padding: 20px 0;
+    padding: 15px 0;
     background: #171617;
 }
 
@@ -15,4 +37,18 @@ body {
     height: 75px;
     background: url(../img/brand.png) no-repeat;
     text-indent: -10000px;
+}
+
+.page-content {
+    height: 100%;
+}
+
+.page-footer {
+    background: #414042;
+    padding: 30px 0;
+    width: 100%;
+}
+
+.page-footer .copyright {
+    margin-top: 20px;
 }
