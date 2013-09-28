@@ -24,9 +24,24 @@
 {% block content %}
     {% if game.is_started and user_role != game.ROLE_OBSERVER %}
         <section id="game-field" class="game-field">
-            <div class="game-editor">
-                <textarea></textarea>
-            </div>
+            <form class="game-editor">
+                <textarea>while True:
+	event = get_current_event()
+
+    if event == 'kick':
+		kick()
+		punch()
+
+    elif event == 'punch':
+    	kick()
+        punch()
+
+    elif event == 'block':
+    	punch()
+        kick()
+                </textarea>
+                <input type="submit" value="Next round" />
+            </form>
             <div class="game-player"></div>
         </section>
     {% elif user_role != game.ROLE_OBSERVER %}
