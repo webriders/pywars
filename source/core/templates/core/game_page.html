@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block page_class %}game-page{% endblock %}
+{% block page_class %}game-page {% if game.is_started and user_role != game.ROLE_OBSERVER %}started{% endif %}{% endblock %}
 
 {% block static %}
     {{ block.super }}
@@ -22,40 +22,23 @@
 {% endblock %}
 
 {% block content %}
-    {% if game.is_started and user_role != game.ROLE_OBSERVER %}
-        <section id="game-field" class="game-field">
-            <form class="game-editor">
-                <textarea>while True:
-	event = get_current_event()
-
-    if event == 'kick':
-		kick()
-		punch()
-
-    elif event == 'punch':
-    	kick()
-        punch()
-
-    elif event == 'block':
-    	punch()
-        kick()
-                </textarea>
-                <input type="submit" value="Next round" />
-            </form>
-            <div class="game-player"></div>
-        </section>
-    {% elif user_role != game.ROLE_OBSERVER %}
+    <form id="join-form" class="join-form" method="post" action="{% url 'core-join-game-action' game.pk %}">
         {% if user_role == game.ROLE_PLAYER_1 %}
             {{ game.get_player_1 }} vs Waiting for oponent...
+        {% elif user_role == game.ROLE_PLAYER_2 %}
+            {% csrf_token %}
+            {{ join_game_form }}
+            <input type="submit" value="Join game" />
         {% else %}
-            {{ game.get_player_1 }} vs
-            <form method="post" action="{% url 'core-join-game-action' game.pk %}">
-                {% csrf_token %}
-                {{ join_game_form }}
-                <input type="submit" value="Join game" />
-            </form>
+            Sorry but game has started already
         {% endif %}
-    {% else %}
-        Go away!
-    {% endif %}
+    </form>
+
+    <section id="game-field" class="game-field">
+        <form class="game-editor">
+            <textarea id="code-editor"></textarea>
+            <input type="submit" value="Next round" />
+        </form>
+        <div class="game-player"></div>
+    </section>
 {% endblock %}

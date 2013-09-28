@@ -72,7 +72,7 @@ class Game(models.Model):
         Game considered to be started when there are 2 joined players with filled names
         :return: True if game is started
         """
-        return self.players.filter(name__isnull=False).count() == 2
+        return self.players.count() == 2
 
     def get_new_rounds(self, last_round_number):
         """
