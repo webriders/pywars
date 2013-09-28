@@ -2,18 +2,12 @@ from django.db import models, IntegrityError
 from django.utils.translation import ugettext_lazy as _
 
 
-class GameManager(models.Manager):
-    pass
-
-
 class Game(models.Model):
     """
     Information about game
     """
     time_started = models.DateTimeField(verbose_name=_("Start time"), null=True, blank=True)
     time_ended = models.DateTimeField(verbose_name=_("End time"), null=True, blank=True)
-
-    objects = GameManager()
 
     class Meta:
         verbose_name = _("Game")
@@ -48,7 +42,7 @@ class Game(models.Model):
         Game considered to be started when there are 2 joined players with filled names
         :return: True if game is started
         """
-        return self.players.filter(name__isnull=False).count() == 2
+        return self.players.filter().count() == 2
 
     def get_new_rounds(self, last_round_number):
         """
