@@ -80,6 +80,9 @@ class Game(models.Model):
         """
         return self.rounds.filter(number__gt=last_round_number)
 
+    def get_round(self, number):
+        return GameRound.get(game=self, number=number)
+
     def submit_code(self, player_id, code):
         """
         Submit code for current round
