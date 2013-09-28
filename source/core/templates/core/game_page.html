@@ -9,7 +9,12 @@
         {% if user_role == game.ROLE_PLAYER_1 %}
             {{ game.get_creator.name }} vs Waiting for oponent...
         {% else %}
-            {{ game.get_creator.name }} vs Form for input
+            {{ game.get_creator.name }} vs
+            <form method="post" action="{% url 'core-join-game-feeder' game.pk %}">
+                {% csrf_token %}
+                {{ join_game_form }}
+                <input type="submit" value="Join game" />
+            </form>
         {% endif %}
     {% else %}
         Go away!

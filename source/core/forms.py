@@ -16,3 +16,20 @@ class StartGameForm(forms.Form):
         new_game = Game.objects.create()
         new_game.join_game(player_id, self.cleaned_data['player_username'])
         return new_game
+
+
+class JoinGameForm(forms.Form):
+    """
+    Process information about second player
+    """
+    game = forms.ModelChoiceField(Game.objects.all(), widget=forms.HiddenInput)
+    player_username = forms.CharField(max_length=254)
+
+    def save(self, player_id):
+        """
+        :param player_id: Who does join game?
+        :type player_id: basestring
+        """
+        game = self.cleaned_data['game']
+        game.join_game(player_id, self.cleaned_data['player_username'])
+        return game
