@@ -35,10 +35,10 @@ class Game(models.Model):
 
         if players_count == 0:
             # First player
-            return Player.objects.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1)
+            return Player.objects.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1, name=name)
         elif players_count == 1:
             # Second player
-            return Player.objects.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1)
+            return Player.objects.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_2, name=name)
         else:
             raise Exception('Game is already started')
 
