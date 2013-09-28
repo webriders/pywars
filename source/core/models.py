@@ -36,6 +36,7 @@ class Game(models.Model):
             self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1, name=name)
         elif players_count == 1:
             self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_2, name=name)
+            GameRound.objects.create(game=self, number=1)
             self.time_started = timezone.now()
             self.save()
         else:
@@ -106,14 +107,17 @@ class Game(models.Model):
         :param last_round_number: last round number, that client has
         :return: QuerySet of Round instances ordered by their number
         """
-        return self.rounds.filter(number__gt=last_round_number)
+        return self.rounds.filter(number__gt=last_round_number, scene__isnull=False)
 
-    def get_current_round(self):
+    def get_last_round(self):
         """
-        Get current Round instance
+        Get last Round instance that has state
         :return: Round instance
         """
-        return self.rounds.order_by('-number')[0]
+        if not self.is_started():
+            raise GameException('Game is not started')
+
+        return self.rounds.filter(state__isnull=False).order_by('-number')[0]
 
     def submit_code(self, player_id, code):
         """
@@ -210,7 +214,7 @@ def emulate_round(sender, **kwargs):
         game_round.scene, player1.state, player2.state, winner = \
             service.emulate(player1_code, player2_code, player1.state, player2.state)
 
-        if winner > 0 or game_round.number == Game.MAX_ROUNDS_COUNT:
+        if winner > 0 or game_round.number >= Game.MAX_ROUNDS_COUNT:
             if winner == 1:
                 player1.is_winner = True
             elif winner == 2:
