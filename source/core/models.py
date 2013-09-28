@@ -93,7 +93,7 @@ class Player(models.Model):
 
     game = models.ForeignKey('Game', verbose_name=_("Game"), related_name="+")
     ident = models.CharField(verbose_name=_("Player ID"), max_length=254)
-    name = models.CharField(verbose_name=_("Name"), max_length=254, null=True, blank=True)
+    name = models.CharField(verbose_name=_("Name"), max_length=254)
 
     role = models.CharField(verbose_name=_("Role"), max_length=16, choices=ROLE_CHOICES)
     health = models.IntegerField(default=100)
