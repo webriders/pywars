@@ -8,6 +8,10 @@ body {
     color: rgba(255, 255, 255, 0.5);
 }
 
+input:focus {
+    outline: 0;
+}
+
 .content-column {
     width: 900px;
     margin: 0 auto;

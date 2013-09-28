@@ -33,9 +33,9 @@ class Game(models.Model):
         players_count = self.players.count()
 
         if players_count == 0:
-            self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_1, name=name)
+            self.players.create(game=self, ident=player_id, role=Game.ROLE_PLAYER_1, name=name)
         elif players_count == 1:
-            self.players.create(game=self, ident=player_id, role=Player.ROLE_PLAYER_2, name=name)
+            self.players.create(game=self, ident=player_id, role=Game.ROLE_PLAYER_2, name=name)
             GameRound.objects.create(game=self, number=1)
             self.time_started = timezone.now()
             self.save()
@@ -62,13 +62,13 @@ class Game(models.Model):
 
     def get_player_1(self):
         try:
-            return self.players.get(role=Player.ROLE_PLAYER_1)
+            return self.players.get(role=Game.ROLE_PLAYER_1)
         except Player.DoesNotExist:
             pass
 
     def get_player_2(self):
         try:
-            return self.players.get(role=Player.ROLE_PLAYER_2)
+            return self.players.get(role=Game.ROLE_PLAYER_2)
         except Player.DoesNotExist:
             pass
 

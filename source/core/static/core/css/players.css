@@ -1,0 +1,31 @@
+.players {
+    padding-top: 40px;
+    text-align: center;
+}
+
+.players .player {
+    display: inline-block;
+}
+
+.players .player .thumbnail {
+    border: 5px solid #000;
+    border-radius: 200px;
+    height: 200px;
+    width: 200px;
+}
+
+.players .player .nickname {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #fff;
+}
+
+.players .delimiter {
+    display: inline-block;
+    font-size: 20px;
+    line-height: 200px;
+    vertical-align: top;
+    padding: 0 30px;
+    text-transform: uppercase;
+    color: #fff;
+}

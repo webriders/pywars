@@ -1,6 +1,8 @@
 {% extends 'core/base.html' %}
 
 {% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
 
 {% block static %}
     <link rel="stylesheet" href="{% static 'core/css/game_creator_page.css' %}" />
@@ -9,9 +11,13 @@
 {% block page_class %}game-creator-page{% endblock %}
 
 {% block content %}
-    <form method="post">
+    {% include "core/includes/players.html" %}
+
+    <form class="create-game-form" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" />
+        <div class="username-field">
+            {% render_field form.player_username placeholder="Enter your nickname" autofocus="true" %}
+        </div>
+        <input class="button" type="submit" value="Start new game" />
     </form>
 {% endblock %}

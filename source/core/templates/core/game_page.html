@@ -24,13 +24,13 @@
 {% block content %}
     <form id="join-form" class="join-form" method="post" action="{% url 'core-join-game-action' game.pk %}">
         {% if user_role == game.ROLE_PLAYER_1 %}
-            {{ game.get_player_1 }} vs Waiting for oponent...
+            {{ game.get_player_1 }} vs Waiting for player...
         {% elif user_role == game.ROLE_PLAYER_2 %}
             {% csrf_token %}
             {{ join_game_form }}
             <input type="submit" value="Join game" />
         {% else %}
-            Sorry but game has started already
+            Sorry but game has already started
         {% endif %}
     </form>
 
