@@ -3,10 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 from core.exceptions import GameException
 
 
-class GameManager(models.Manager):
-    pass
-
-
 class Game(models.Model):
     """
     Information about game
@@ -17,8 +13,6 @@ class Game(models.Model):
 
     time_started = models.DateTimeField(verbose_name=_("Start time"), null=True, blank=True)
     time_ended = models.DateTimeField(verbose_name=_("End time"), null=True, blank=True)
-
-    objects = GameManager()
 
     class Meta:
         verbose_name = _("Game")
