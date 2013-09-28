@@ -1,17 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.views.generic import FormView, DetailView, View
-from core.forms import StartGameForm, JoinGameForm
-from core.models import Game
+from django.views.generic import View
 
 
-
-
-
-
-
-
-
+__all__ = ['new_rounds_feed']
 
 
 class NewRoundsView(View):
@@ -20,7 +11,7 @@ class NewRoundsView(View):
     def get(self, request, *args, **kwargs):
         # Mock now
         import os
-        mock_path = os.path.join(os.path.dirname(__file__), 'mocks/scene.json')
+        mock_path = os.path.join(os.path.dirname(__file__), '../mocks/scene.json')
         return HttpResponse(open(mock_path).read(), content_type='application/json')
 
         #game_pk = kwargs['game_pk']
@@ -33,3 +24,4 @@ class NewRoundsView(View):
         #return HttpResponse(json.dumps(rounds), content_type='application/json')
 
 new_rounds_feed = NewRoundsView.as_view()
+

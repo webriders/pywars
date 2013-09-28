@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{% static 'core/css/game_creator_page.css' %}" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="{% static 'core/js/pywars.js' %}"></script>
+    <script src="{% static 'core/js/game.js' %}"></script>
 
     {% block static %}
     {% endblock %}
@@ -17,7 +19,7 @@
 <body>
     <div class="page-container {% block page_class %}{% endblock %}">
         <header class="page-header">
-            <h1 class="brand">PyWars</h1>
+            <a href="{% url 'core-start-game-page' %}"><h1 class="brand">PyWars</h1></a>
         </header>
         <section class="page-content">
             <div class="content-column">
