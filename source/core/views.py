@@ -1,5 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.views.generic import FormView, DetailView
+from django.views.generic import FormView, DetailView, View
 from core.forms import StartGameForm, JoinGameForm
 from core.models import Game
 
@@ -55,11 +56,7 @@ class GamePage(DetailView, PlayerMixin):
 
         return context
 
-game_page = GamePage.as_view()import json
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.views.generic import View
-from core.models import Game
+game_page = GamePage.as_view()
 
 
 class NewRoundsView(View):
