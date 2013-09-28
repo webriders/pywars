@@ -16,7 +16,8 @@ class EmulatorService(object):
         :param player2_code: string with code for player2
         :param player1_state_json: string with JSON state for player1
         :param player2_state_json: string with JSON state for player2
-        :return: tuple with JSON of generated scene, JSON of player1 state, JSON of player2 state
+        :return: tuple with JSON of generated scene, JSON of player1 state, JSON of player2 state,
+        number of player who won or 0
         """
         player1_action_source = SimpleActionSource(player1_code)
         player2_action_source = SimpleActionSource(player2_code)
@@ -59,4 +60,11 @@ class EmulatorService(object):
         except StopIteration:
             pass
 
-        return json.dumps(scene), player1.to_json(), player2.to_json()
+        if player1.health <= 0:
+            winner = 2
+        elif player2.health <= 0:
+            winner = 1
+        else:
+            winner = 0
+
+        return json.dumps(scene), player1.to_json(), player2.to_json(), winner
