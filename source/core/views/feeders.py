@@ -38,8 +38,8 @@ class GameStateFeed(DetailView, PlayerMixin, JSONResponseMixin):
         elif game.is_started():
             state = {
                 'state': 'round',
-                'current_code': game.get_current_code(self.get_player_id()),
-                'is_opponent_submitted': game.is_opponent_submitted(self.get_player_id())
+                'currentCode': game.get_current_code(self.get_player_id()),
+                'isOpponentSubmitted': game.is_opponent_submitted(self.get_player_id())
             }
         else:
             state = {

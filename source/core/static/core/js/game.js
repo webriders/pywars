@@ -21,9 +21,9 @@ pywars.game = {
         this.state = 'waiting';
         this.lastRound = 0;
 
-        this.current_round = 0;
-        this.submitted_round = 0;
-        this.oppponent_submitted = false;
+        this.currentRound = 0;
+        this.submittedRound = 0;
+        this.opponentSubmitted = false;
 
         var self = this;
 
@@ -42,7 +42,7 @@ pywars.game = {
             $.post(self.submitCodeUrl, $(this).serialize(), function(data) {
                 if (data.status == 'success') {
                     self.disableCodeForm();
-                    self.submitted_round = self.lastRound;
+                    self.submittedRound = self.lastRound;
                 }
             });
         });
@@ -81,17 +81,17 @@ pywars.game = {
                 }
             }
 
-            if(data.round != self.submitted_round && self.isRendering == false) {
-                self.opponent_submitted = false;
-                self.enableCodeform();
+            if(data.round != self.submittedRound && self.isRendering == false) {
+                self.opponentSubmitted = false;
+                self.enableCodeForm();
             }
-            if(data.round != self.current_round && data.round !=0 && self.isRendering == false) {
+            if(data.round != self.currentRound && data.round !=0 && self.isRendering == false) {
                 pywars.messages.info('Round ' + (parseInt(data.round)+1) + ' started');
-                self.current_round = data.round;
+                self.currentRound = data.round;
             }
 
-            if (self.opponent_submitted != data.is_opponent_submitted && data.is_opponent_submitted == true && self.userRole != 'observer') {
-                self.opponent_submitted = true;
+            if (self.opponentSubmitted != data.isOpponentSubmitted && data.isOpponentSubmitted == true && self.userRole != 'observer') {
+                self.opponentSubmitted = true;
                 pywars.messages.info('Opponent submitted code!');
             }
 
