@@ -1,3 +1,10 @@
+.page-container.game-creator-page {
+    height: auto;
+    min-height: 100%;
+    padding-bottom: 150px;
+}
+
+
 .game-creator-page .page-footer {
     position: absolute;
     bottom: 0;
