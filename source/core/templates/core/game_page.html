@@ -48,7 +48,35 @@
     <section id="game-field" class="game-field {% if game.is_finished or user_role == game.ROLE_OBSERVER %}readonly{% endif %}">
         <form class="game-editor" id="code-form">
             {% csrf_token %}
-            <textarea id="code-editor" name="code"></textarea>
+            <textarea id="code-editor" name="code"># Little intro
+#
+# >>> player = Player()
+# >>> print dir(player)
+# ['punch', 'kick', 'block']
+#
+# >>> print player.punch.__doc__
+# Punch is the fastest fighting move
+#
+# >>> print player.kick.__doc__
+# Kick is the most powerful fighting move
+#
+# >>> print player.block.__doc__
+# Just block :)
+#
+# Some initial code for you:
+
+player.punch()
+player.kick()
+player.block()
+
+# Don't forget to press "Fight" button,
+# when your code will be ready
+
+# Round will be started, when both fighters
+# press "Fight" button
+
+# Have fun!
+            </textarea>
             <input class="button" type="submit" value="Fight" />
         </form>
         <div class="game-player">
