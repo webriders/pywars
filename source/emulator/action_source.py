@@ -8,6 +8,7 @@ class SimpleActionSource(object):
     """
     Very very simple action source, that parses only our commands using regexp
     """
+    MAX_COMMAND_COUNT = 10
 
     def __init__(self, code):
         self.code = code
@@ -40,5 +41,6 @@ class SimpleActionSource(object):
         Validate code
         """
         actions = list(self._generator())
-        if len(actions) != 10:
-            raise ValidationError('There should be exactly 10 commands')
+
+        if len(actions) != self.MAX_COMMAND_COUNT:
+            raise ValidationError('There should be exactly %d commands' % self.MAX_COMMAND_COUNT)
