@@ -81,11 +81,10 @@ pywars.game = {
             }
 
             if(data.round != self.submitted_round && self.isRendering == false) {
-                console.log(self.isRendering)
                 self.enableCodeForm();
             }
             if(data.round != self.current_round && data.round !=0 && self.isRendering == false) {
-                pywars.messages.info('Round ' + data.round+1 + ' started');
+                pywars.messages.info('Round ' + (parseInt(data.round)+1) + ' started');
                 self.current_round = data.round;
             }
 
