@@ -20,6 +20,8 @@
             pywars.game.stateUrl = "{% url 'core-game-state-feed' game.pk %}";
             pywars.game.submitCodeUrl = "{% url 'core-submit-code-action' game.pk %}";
             pywars.game.newRoundsUrl = "{% url 'core-new-rounds-feed' game.pk 0 %}";
+            pywars.game.player1 = "{{ game.get_player_1 }}";
+            pywars.game.player2 = "{{ game.get_player_2 }}";
             pywars.game.init();
         });
     </script>

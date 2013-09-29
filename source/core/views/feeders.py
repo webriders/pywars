@@ -1,8 +1,8 @@
 import json
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.views.generic import View, DetailView
+from django.views.generic import DetailView
 from core.models import Game
+from core.views.mixins import PlayerMixin
 
 
 __all__ = ['new_rounds_feed', 'game_state_feed']
@@ -23,17 +23,35 @@ class NewRoundsFeed(DetailView):
 new_rounds_feed = NewRoundsFeed.as_view()
 
 
-class GameStateFeed(DetailView):
+class GameStateFeed(DetailView, PlayerMixin):
     model = Game
 
     def get(self, request, *args, **kwargs):
         game = self.get_object()
         last_round = game.get_last_round()
 
-        state = {
-            'state': 'round' if game.is_started() else 'waiting',
-            'round': last_round.number if last_round is not None else 0
-        }
+        if game.is_finished():
+            winner = game.get_result()
+
+            state = {
+                'state': 'finished',
+                'winner': winner.name if winner else None
+            }
+        elif game.is_started():
+            state = {
+                'state': 'round',
+                'current_code': game.get_current_code(self.get_player_id())
+            }
+        else:
+            state = {
+                'state': 'waiting'
+            }
+
+        state.update({
+            'round': last_round.number if last_round is not None else 0,
+            'player1_name': game.get_player_1().name,
+            'player2_name': game.get_player_2().name,
+        })
 
         return HttpResponse(json.dumps(state), content_type='application/json')
 

@@ -5,6 +5,8 @@ pywars.game = {
     stateUrl: '', // will be defined inside template
     submitCodeUrl: '',
     newRoundsUrl: '',
+    player1: 'player1',
+    player2: 'player2',
 
     init: function() {
         this.joinForm = $("#join-game-form");
@@ -18,6 +20,7 @@ pywars.game = {
 
         var self = this;
         setInterval(function() { self.updateState() }, 3 * 1000);
+        self.updateState();
 
         this.joinForm.submit(function(e) {
             e.preventDefault();
@@ -26,6 +29,7 @@ pywars.game = {
 
         this.codeForm.submit(function(e) {
             e.preventDefault();
+            self.disableCodeForm();
             var code = self.codeEditor.getValue();
 
             $.post(self.submitCodeUrl, $(this).serialize(), function(data) {
@@ -45,6 +49,11 @@ pywars.game = {
         var self = this;
 
         $.get(this.stateUrl, function(data) {
+            self.player1 = data.player1_name;
+            self.player2 = data.player2_name;
+
+            self.renderCode(data.current_code);
+
             if (data.state != self.state) {
                 switch (data.state) {
                     case 'round':
@@ -64,8 +73,8 @@ pywars.game = {
     },
 
     initArena: function() {
-        var f1 = new pywars.Fighter('scorpion', 1);
-        var f2 = new pywars.Fighter('scorpion', 2);
+        var f1 = new pywars.Fighter(this.player1, 1);
+        var f2 = new pywars.Fighter(this.player2, 2);
 
         pywars.Arena.initStage();
 
@@ -96,15 +105,38 @@ pywars.game = {
         self.lastRound = roundNumber;
 
         $.get(url, {}, function(data) {
-
-                var round = data[0];
-                console.log(round)
-                pywars.Arena.play($.parseJSON(round['scene']));
+            var round = data[0];
+            pywars.Arena.play($.parseJSON(round['scene']));
 
         });
     },
 
     finishGame: function() {
+        alert('game is finished');
+    },
 
+    renderCode: function(code) {
+        var self = this;
+
+        if(code == null)
+            self.enableCodeform();
+        else {
+            self.codeEditor.setValue(code);
+            self.disableCodeForm();
+        }
+    },
+
+    disableCodeForm: function() {
+        var self = this;
+
+        self.codeEditor.setOption('readOnly', 'nocursor');
+        self.codeForm.css('opacity', 0.3);
+    },
+
+    enableCodeform: function() {
+        var self = this;
+
+        self.codeEditor.setOption('readOnly', false);
+        self.codeForm.css('opacity', 1);
     }
 };

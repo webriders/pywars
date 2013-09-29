@@ -12,7 +12,7 @@ class FightingAction(Action):
 
 class PunchingAction(FightingAction):
     name = 'punching'
-    duration = 2
+    duration = 4
     damage = 5
 
 
