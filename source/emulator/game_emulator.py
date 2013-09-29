@@ -33,12 +33,10 @@ class GameEmulator(object):
 
             # Perform all queued actions
             for player in self.players:
-                player.finish()
                 # Queue next action if player has finished action
                 if player.action.tick >= player.action.duration:
                     # Need to get next state
                     player.queue_action(player.action_source.next())
-                    player.finish()
 
             # Apply all rules for this tick
             for rule in self.rules:
@@ -50,3 +48,6 @@ class GameEmulator(object):
                 else:
                     rule.resolve(*self.players[::-1])
                     rule.resolve(*self.players)
+
+            for player in self.players:
+                player.finish()

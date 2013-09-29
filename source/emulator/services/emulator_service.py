@@ -67,4 +67,6 @@ class EmulatorService(object):
         else:
             winner = 0
 
+        print json.dumps(scene)
+
         return json.dumps(scene), player1.to_json(), player2.to_json(), winner
