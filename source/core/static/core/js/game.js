@@ -136,7 +136,9 @@ pywars.game = {
         else
             winnerMessage.text("Seems like you both are good enough. Tie!");
 
-        winnerMessageBlock.fadeIn();
+        winnerMessageBlock.fadeIn(400, function() {
+            $(window).trigger('resize');
+        });
     },
 
     disableCodeForm: function() {
