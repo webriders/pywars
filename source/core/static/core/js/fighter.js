@@ -6,7 +6,7 @@ pywars.Fighter = function (playerName, order) {
   var stanceDelta = order == 1 ? 0 : -35;
   var hitDelta =  order == 1 ? 0 : -55;
 
-  var staticStates = ['waiting', 'blocking'];
+  var staticStates = ['waiting'];
   var prevState;
 
   var sprites = {
@@ -52,7 +52,7 @@ pywars.Fighter = function (playerName, order) {
       },
       waiting: [31, 39, "waiting", 1],
       blocking: {
-        frames: [40,41,42,42,42,42,42,42],
+        frames: [40,41,42,42,42,42,42],
         next: "blocking_end",
         speed: 1
       },
@@ -65,10 +65,6 @@ pywars.Fighter = function (playerName, order) {
   this.setState = function(state) {
     if ($.inArray(state, staticStates) != -1 && prevState == state) {
       return;
-    }
-
-    if (animation.currentAnimation == 'blocking') {
-      animation.gotoAndPlay('blocking_end');
     }
 
     if (sprites.animations[state]){
