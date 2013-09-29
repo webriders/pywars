@@ -85,7 +85,7 @@ pywars.game = {
                 self.enableCodeform();
             }
             if(data.round != self.current_round && data.round !=0 && self.isRendering == false) {
-                pywars.messages.info('Round ' + data.round + ' started');
+                pywars.messages.info('Round ' + data.round+1 + ' started');
                 self.current_round = data.round;
             }
 
