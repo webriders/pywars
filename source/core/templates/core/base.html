@@ -13,6 +13,12 @@
 
     {% block static %}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="{% static 'libs/noty/jquery.noty.js' %}"></script>
+        <script src="{% static 'libs/noty/layouts/topCenter.js' %}"></script>
+        <script src="{% static 'libs/noty/themes/default.js' %}"></script>
+        <script>
+            $.noty.defaults.layout = 'topCenter';
+        </script>
         <script src="{% static 'core/js/easeljs-0.7.0.min.js' %}"></script>
         <script src="{% static 'core/js/soundjs-0.5.0.min.js' %}"></script>
         <script src="{% static 'core/js/preloadjs-0.4.0.min.js' %}"></script>
