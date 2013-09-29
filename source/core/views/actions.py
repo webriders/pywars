@@ -4,6 +4,7 @@ from django.views.generic.detail import SingleObjectMixin
 from core.exceptions import GameException
 from core.forms import JoinGameForm, SubmitCodeForm
 from core.models import Game
+from emulator.action_source import ValidationError
 from mixins import PlayerMixin, JSONResponseMixin
 
 
@@ -28,7 +29,7 @@ class SubmitCodeAction(FormView, PlayerMixin, SingleObjectMixin, JSONResponseMix
         game = self.get_object()
         try:
             form.save(game, self.get_player_id())
-        except GameException, exc:
+        except (GameException, ValidationError), exc:
             return self.render_to_json_response({
                 'status': 'error',
                 'message': exc.message

@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from core.exceptions import GameException
+from emulator.action_source import SimpleActionSource
 from emulator.services.emulator_service import EmulatorService
 
 
@@ -196,6 +197,11 @@ class GameSnippet(models.Model):
     game_round = models.ForeignKey('GameRound', verbose_name=_("Game round"), related_name='snippets')
     player = models.ForeignKey('Player', verbose_name=_("Player"), related_name='snippets')
     code = models.TextField(verbose_name=_("Code"))
+
+    def save(self, *args, **kwargs):
+        SimpleActionSource(self.code).validate()
+
+        return super(GameSnippet, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Code snippet")
