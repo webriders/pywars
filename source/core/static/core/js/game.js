@@ -82,7 +82,7 @@ pywars.game = {
 
             if(data.round != self.submitted_round && self.isRendering == false) {
                 console.log(self.isRendering)
-                self.enableCodeform();
+                self.enableCodeForm();
             }
             if(data.round != self.current_round && data.round !=0 && self.isRendering == false) {
                 pywars.messages.info('Round ' + data.round+1 + ' started');
@@ -172,13 +172,15 @@ pywars.game = {
         if (this.codeEditor) {
             this.codeEditor.setOption('readOnly', 'nocursor');
             this.codeForm.css('opacity', 0.3);
+            this.codeForm.find('[type=submit]').val('Waiting for opponent...');
         }
     },
 
-    enableCodeform: function() {
+    enableCodeForm: function() {
         if (this.codeEditor) {
             this.codeEditor.setOption('readOnly', false);
             this.codeForm.css('opacity', 1);
+            this.codeForm.find('[type=submit]').val('Fight');
         }
     }
 };

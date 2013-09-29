@@ -33,7 +33,7 @@
     <section id="game-message" class="game-message">
         {% if user_role == game.ROLE_PLAYER_1 %}
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
-            <p>{% trans "Share link to this game with your oponent" %}</p>
+            <p>{% trans "Share link to this game with your opponent" %}</p>
             <div class="join-game-form">
                 <div class="username-field">
                     <input type="text" value="http://{{ request.META.HTTP_HOST }}{{ request.path }}" onclick="$(this).select()" />
