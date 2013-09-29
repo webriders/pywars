@@ -1,0 +1,3 @@
+Do you like mortal kombat? And how about coding? We like both. So, we decided to combine our favorite hobbies.
+PyWars is the game where you can kick enemy's ass using code!
+This project was written in 48 hours during Django Dash 2013. We hope you will enjoy it...
