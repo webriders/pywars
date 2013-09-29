@@ -15,6 +15,7 @@
 
     <script src="{% static 'core/js/game.js' %}"></script>
     <script src="{% static 'libs/codemirror/codemirror.js' %}"></script>
+    <script src="{% static 'libs/codemirror/mode/python/python.js' %}"></script>
     <script>
         $(function() {
             pywars.game.stateUrl = "{% url 'core-game-state-feed' game.pk %}";
