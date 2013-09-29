@@ -26,7 +26,6 @@ class FightingRule(Rule):
                 enemy.queue_action(GettingHitByPunchAction())
             elif type(player.action) is KickingAction:
                 enemy.queue_action(GettingHitByKickAction())
-            enemy.finish()
 
             enemy.queue_damage(player.action.damage)
 
@@ -39,5 +38,5 @@ class FightingRule(Rule):
 
 class VictoryRule(Rule):
     def resolve(self, player, enemy):
-        if isinstance(player.action, FallingAction):
+        if isinstance(player.action, FallingAction) and enemy.action != enemy._queued_action:
             enemy.queue_action(VictoryAction())
