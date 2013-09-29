@@ -83,7 +83,7 @@ pywars.game = {
 
             if(data.round != self.submitted_round && self.isRendering == false) {
                 self.opponent_submitted = false;
-                self.enableCodeform();
+                self.enableCodeForm();
             }
             if(data.round != self.current_round && data.round !=0 && self.isRendering == false) {
                 pywars.messages.info('Round ' + (parseInt(data.round)+1) + ' started');
