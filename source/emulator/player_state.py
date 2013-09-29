@@ -63,7 +63,7 @@ class PlayerState(object):
         """
         assert type(value) is int
 
-        self._queued_health = self.health - value
+        self.health = self._queued_health = self.health - value
 
     def queue_action(self, action):
         """
@@ -72,7 +72,7 @@ class PlayerState(object):
         """
         assert isinstance(action, Action)
 
-        self._queued_action = action
+        self.action = self._queued_action = action
 
     def finish(self):
         """
