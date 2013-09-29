@@ -1,7 +1,7 @@
 import json
 from emulator import PlayerState, GameEmulator
 from emulator.action_source import SimpleActionSource
-from emulator.rules import FightingRule
+from emulator.rules import FightingRule, VictoryRule
 
 
 class EmulatorService(object):
@@ -25,7 +25,7 @@ class EmulatorService(object):
         player1 = PlayerState('player1', player1_action_source, player1_state_json)
         player2 = PlayerState('player2', player2_action_source, player2_state_json)
 
-        emulator = GameEmulator([player1, player2], rules=[FightingRule()])
+        emulator = GameEmulator([player1, player2], rules=[FightingRule(), VictoryRule()])
 
         scene = {}
 

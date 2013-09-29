@@ -42,5 +42,17 @@ class GettingHitByKickAction(Action):
     duration = 1
 
 
-class BlockedAction(Action):
-    duration = 0
+class FallingAction(Action):
+    duration = 1
+
+class FallingByPunchAction(FallingAction):
+    name = 'falling_by_punch'
+
+
+class FallingByKickAction(FallingAction):
+    name = 'falling_by_kick'
+
+
+class VictoryAction(Action):
+    duration = 1
+    name = 'victory'

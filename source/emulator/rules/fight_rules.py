@@ -2,7 +2,7 @@ from emulator.rules.base import Rule
 from emulator.rules.actions import *
 
 
-__all__ = ['FightingRule']
+__all__ = ['FightingRule', 'VictoryRule']
 
 
 class FightingRule(Rule):
@@ -29,3 +29,15 @@ class FightingRule(Rule):
             enemy.finish()
 
             enemy.queue_damage(player.action.damage)
+
+            if enemy.health <= 0:
+                if type(player.action) is PunchingAction:
+                    enemy.queue_action(FallingByPunchAction())
+                elif type(player.action) is KickingAction:
+                    enemy.queue_action(FallingByKickAction())
+
+
+class VictoryRule(Rule):
+    def resolve(self, player, enemy):
+        if isinstance(player.action, FallingAction):
+            enemy.queue_action(VictoryAction())
