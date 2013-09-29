@@ -43,12 +43,13 @@ class PlayerState(object):
 
         data = json.loads(json_data)
         self.health = data['health']
+        self.energy = data['energy']
 
     def to_json(self):
         """
         Serialize state to json
         """
-        return json.dumps({'health': self.health})
+        return json.dumps({'health': self.health, 'energy': self.energy})
 
     def register_callbacks(self, health_callback, energy_callback, action_callback):
         """
