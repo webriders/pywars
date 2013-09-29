@@ -5,6 +5,7 @@ pywars.Fighter = function (playerName, order) {
   var skin =  'scorpion';
   var stanceDelta = order == 1 ? 0 : -35;
   var hitDelta =  order == 1 ? 0 : -55;
+  var fallingDelta = 0;
 
   var staticStates = ['waiting'];
   var prevState;
@@ -17,7 +18,9 @@ pywars.Fighter = function (playerName, order) {
       '/static/core/assets/' + skin + '/hit-' + order + '.png',
       '/static/core/assets/' + skin + '/a-stance-' + order + '.png',
       '/static/core/assets/' + skin + '/block-s-' + order + '.png',
-      '/static/core/assets/' + skin + '/block-e-' + order + '.png'
+      '/static/core/assets/' + skin + '/block-e-' + order + '.png',
+      '/static/core/assets/' + skin + '/victory-' + order + '.png',
+      '/static/core/assets/' + skin + '/falling-' + order + '.png'
     ],
     frames: [
       // x, y, width, height, imageIndex, regX, regY
@@ -34,7 +37,24 @@ pywars.Fighter = function (playerName, order) {
       //block-start
       [0, 0, 57, 129, 5, stanceDelta ,0],[57, 0, 57, 129, 5, stanceDelta ,0],[114, 0, 57, 129, 5, stanceDelta ,0],
       //block-end
-      [0, 0, 57, 129, 6, stanceDelta ,0],[57, 0, 57, 129, 6, stanceDelta ,0]
+      [0, 0, 57, 129, 6, stanceDelta ,0],[57, 0, 57, 129, 6, stanceDelta ,0],
+
+      //victory
+      [0,   0, 97, 151, 7, 20, 20],
+      [97,  0, 97, 151, 7, 20, 20],
+      [194, 0, 97, 151, 7, 20, 20],
+      [291, 0, 97, 151, 7, 20, 20],
+      [388, 0, 97, 151, 7, 20, 20],
+      [485, 0, 97, 151, 7, 20, 20],
+
+      //falling
+      [0,   0, 129, 131, 8, fallingDelta - 20, 0],
+      [129, 0, 129, 131, 8, fallingDelta + 10, 0],
+      [258, 0, 129, 131, 8, fallingDelta + 40, -10],
+      [387, 0, 129, 131, 8, fallingDelta + 60, -30],
+      [516, 0, 129, 131, 8, fallingDelta + 90, -80],
+      [645, 0, 129, 131, 8, fallingDelta + 100, -110],
+
     ],
     animations: {
       stance: [0, 8, "stance", 1],
@@ -46,7 +66,7 @@ pywars.Fighter = function (playerName, order) {
         speed: 1
       },
       being_hit_by_punch: {
-        frames: [31,32,27,27, 32, 27],
+        frames: [31,32,27,27,32,27],
         next: "waiting",
         speed: 1
       },
@@ -56,7 +76,19 @@ pywars.Fighter = function (playerName, order) {
         next: "blocking_end",
         speed: 1
       },
-      blocking_end: [43, 44, "waiting", 1]
+      blocking_end: [43, 44, "waiting", 1],
+      victory: [45, 49, "", 1],
+      falling_by_kick: {
+        frames: [31,32,33,34,35,27,52,53,54,55,56],
+        next: "",
+        speed: 1
+      },
+       falling_by_punch: {
+        frames: [31,32,27,27,32,27,52,53,54,55,56],
+        next: "",
+        speed: 1
+      }
+
     }
   };
 
