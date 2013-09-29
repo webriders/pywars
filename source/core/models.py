@@ -127,18 +127,18 @@ class Game(models.Model):
         :param code: string containing code
         """
         if self.is_started() is False:
-            raise Exception('Game is not started')
+            raise GameException('Game is not started')
 
         try:
             player = self.players.get(ident=player_id)
         except Player.DoesNotExist:
-            raise Exception('Unknown player specified')
+            raise GameException('Unknown player specified')
 
         current_round = self.rounds.all().order_by('-number')[0]
         try:
             GameSnippet.objects.create(game_round=current_round, player=player, code=code)
         except IntegrityError:
-            raise Exception('Code for this round was already submitted')
+            raise GameException('Code for this round was already submitted')
 
 
 class Player(models.Model):
@@ -229,7 +229,5 @@ def emulate_round(sender, **kwargs):
         game.save()
         player1.save()
         player2.save()
-
-
 
 post_save.connect(emulate_round, sender=GameSnippet)

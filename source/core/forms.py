@@ -33,3 +33,19 @@ class JoinGameForm(forms.Form):
         game = self.cleaned_data['game']
         game.join_game(player_id, self.cleaned_data['player_username'])
         return game
+
+
+class SubmitCodeForm(forms.Form):
+    """
+    Process submitted code from player
+    """
+    code = forms.CharField(widget=forms.Textarea)
+
+    def save(self, game, player_id):
+        """
+        :param game: For what game this code?
+        :type game: Game instance
+        :param player_id: Who does submit code?
+        :type player_id: basestring
+        """
+        game.submit_code(player_id, self.cleaned_data['code'])

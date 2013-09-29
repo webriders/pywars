@@ -11,6 +11,7 @@ urlpatterns = patterns(
 
     # Actions
     url(r'^game/(?P<pk>\d+)/join/$', 'join_game_action', name='core-join-game-action'),
+    url(r'^game/(?P<pk>\d+)/code/$', 'submit_code_action', name='core-submit-code-action'),
 
     # Feeders
     url(r'^game/(?P<game_pk>\d+)/round/(?P<last_round_number>\d+)/$', 'new_rounds_feed', name='core-new-rounds-feed'),

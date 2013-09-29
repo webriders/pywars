@@ -18,6 +18,7 @@
     <script>
         $(function() {
             pywars.game.stateUrl = "{% url 'core-game-state-feed' game.pk %}";
+            pywars.game.submitCodeUrl = "{% url 'core-submit-code-action' game.pk %}";
             pywars.game.init();
         });
     </script>
@@ -44,8 +45,9 @@
     </form>
 
     <section id="game-field" class="game-field">
-        <form class="game-editor">
-            <textarea id="code-editor"></textarea>
+        <form class="game-editor" id="code-form">
+            {% csrf_token %}
+            <textarea id="code-editor" name="code"></textarea>
             <input type="submit" value="Next round" />
         </form>
         <div class="game-player"></div>
