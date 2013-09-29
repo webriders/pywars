@@ -58,8 +58,10 @@ pywars.game = {
             self.player1 = data.players[0]
             self.player2 = data.players[1];
 
-            if(data.round != self.submitted_round)
+            if(data.round != self.submitted_round && self.isRendering == false) {
                 self.enableCodeform();
+                pywars.messages.info('Round ' + self.round + ' started')
+            }
 
             if (self.lastRound != data.round) {
                 self.renderRound(data.round);
@@ -93,7 +95,9 @@ pywars.game = {
         pywars.Arena.addFighter(f2);
         pywars.Arena.addFighter(f1);
 
-        $('#stage').on('scenarios.end', function(){ self.isRendering = false; });
+        $('#stage').on('scenarios.end', function(){
+            self.isRendering = false;
+        });
     },
 
     startGame: function() {
