@@ -39,6 +39,16 @@ class EmulatorService(object):
             scene[emulator.tick] = scene.get(emulator.tick, [])
             scene[emulator.tick].append(event)
 
+        def energy_callback(player):
+            event = {
+                'type': 'energy',
+                'player1': player1.energy,
+                'player2': player2.energy
+            }
+
+            scene[emulator.tick] = scene.get(emulator.tick, [])
+            scene[emulator.tick].append(event)
+
         def action_callback(player):
             player_number = 1 if player is player1 else 2
 
@@ -52,8 +62,8 @@ class EmulatorService(object):
             scene[emulator.tick] = scene.get(emulator.tick, [])
             scene[emulator.tick].append(event)
 
-        player1.register_callbacks(health_callback, action_callback)
-        player2.register_callbacks(health_callback, action_callback)
+        player1.register_callbacks(health_callback, energy_callback, action_callback)
+        player2.register_callbacks(health_callback, energy_callback, action_callback)
 
         try:
             emulator.run()

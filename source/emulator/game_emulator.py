@@ -1,4 +1,5 @@
 import random
+from emulator.rules import WaitingAction
 
 __all__ = ['GameEmulator']
 
@@ -33,6 +34,11 @@ class GameEmulator(object):
 
             # Perform all queued actions
             for player in self.players:
+                if player.energy < 100:
+                    player.queue_energy(player.energy+20)
+                    player.action = WaitingAction()
+                    continue
+
                 # Queue next action if player has finished action
                 if player.action.tick >= player.action.duration:
                     # Need to get next state
