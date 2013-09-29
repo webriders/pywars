@@ -17,6 +17,7 @@ pywars.Arena = new function () {
 
   var newGame = true;
 
+
   function initTimer(scenario) {
     if (timer) {
       clearInterval(timer);
@@ -72,10 +73,14 @@ pywars.Arena = new function () {
   };
 
   function showSplash() {
-    $('.canvas-container').append('<img src="/static/core/assets/fight.gif" class="fight" />');
+    var fight = createjs.Sound.play("fight");
+    fight.volume = 1;
+    setTimeout(function(){
+      $('.canvas-container').append('<img src="/static/core/assets/fight.gif" class="fight" />');
+    }, 300);
     setTimeout(function(){
       $('.canvas-container .fight').remove()
-    },1000);
+    },1300);
     newGame = false;
   }
 
@@ -103,6 +108,10 @@ pywars.Arena = new function () {
     createjs.Ticker.setFPS(FPS);
     createjs.Ticker.useRAF = true;
     createjs.Ticker.addEventListener("tick", updateStage);
+
+    createjs.Sound.registerSound("/static/core/assets/sounds/fight.wav", "fight");
+    createjs.Sound.registerSound("/static/core/assets/sounds/punch.wav", "punch");
+    createjs.Sound.registerSound("/static/core/assets/sounds/kick.wav", "kick");
   };
 
   this.addFighter = function (fighter) {
@@ -133,7 +142,9 @@ pywars.Arena = new function () {
       showSplash()
     }
 
-    initTimer(scenario);
+    setTimeout(function(){
+      initTimer(scenario);
+    }, 1000)
   };
 
 

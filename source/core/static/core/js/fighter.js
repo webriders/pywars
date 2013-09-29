@@ -67,6 +67,14 @@ pywars.Fighter = function (playerName, order) {
       return;
     }
 
+    if (state == 'kicking'){
+      var kick = createjs.Sound.play("kick");
+      kick.volume = 1;
+    } else if (state == 'punching'){
+      var punch = createjs.Sound.play("punch");
+      punch.volume = 1;
+    }
+
     if (sprites.animations[state]){
       animation.gotoAndPlay(state);
       prevState = state;
