@@ -13,7 +13,7 @@
 {% block content %}
     {% include "core/includes/players.html" %}
 
-    <form class="create-game-form" method="post">
+    <form class="join-game-form" method="post">
         {% csrf_token %}
         <div class="username-field">
             {% render_field form.player_username placeholder="Enter your nickname" autofocus="true" %}

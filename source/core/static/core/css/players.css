@@ -1,10 +1,11 @@
 .players {
-    padding-top: 40px;
+    padding: 40px 0;
     text-align: center;
 }
 
 .players .player {
     display: inline-block;
+    position: relative;
 }
 
 .players .player .thumbnail {
@@ -14,10 +15,20 @@
     width: 200px;
 }
 
+.players .player:first-child .nickname {
+    left: auto;
+    right: 250px;
+}
+
 .players .player .nickname {
-    margin-top: 20px;
+    position: absolute;
+    top: 0;
+    left: 250px;
+    right: auto;
     font-size: 20px;
     color: #fff;
+    line-height: 200px;
+    white-space: nowrap;
 }
 
 .players .delimiter {

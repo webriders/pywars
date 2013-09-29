@@ -6,6 +6,9 @@
     display: none;
 }
 
+.game-page .join-message {
+    padding: 10px 0;
+}
 
 .game-field {
     display: none;
