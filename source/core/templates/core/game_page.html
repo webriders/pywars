@@ -19,6 +19,7 @@
         $(function() {
             pywars.game.stateUrl = "{% url 'core-game-state-feed' game.pk %}";
             pywars.game.submitCodeUrl = "{% url 'core-submit-code-action' game.pk %}";
+            pywars.game.newRoundsUrl = "{% url 'core-new-rounds-feed' game.pk 0 %}";
             pywars.game.init();
         });
     </script>
@@ -35,6 +36,7 @@
         {% elif user_role == game.ROLE_PLAYER_2 %}
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
             {% csrf_token %}
+            {% render_field join_game_form.game %}
             <div class="username-field">
                 {% render_field join_game_form.player_username placeholder="Enter your nickname" autofocus="true" %}
             </div>
@@ -50,6 +52,23 @@
             <textarea id="code-editor" name="code"></textarea>
             <input type="submit" value="Next round" />
         </form>
-        <div class="game-player"></div>
+        <div class="game-player">
+            <div class="canvas-container">
+                <div class=" player-container player-1">
+                    <div class="name">Player 1</div>
+                    <div class="health">
+                        <div></div>
+                    </div>
+                </div>
+
+                <div class=" player-container player-2">
+                    <div class="name">Player 2</div>
+                    <div class="health">
+                        <div></div>
+                    </div>
+                </div>
+                <canvas id="stage"></canvas>
+            </div>
+        </div>
     </section>
 {% endblock %}
