@@ -47,10 +47,12 @@ class GameStateFeed(DetailView, PlayerMixin):
                 'state': 'waiting'
             }
 
+        players = [game.get_player_1(), game.get_player_2()]
+
         state.update({
             'round': last_round.number if last_round is not None else 0,
-            'player1_name': game.get_player_1().name,
-            'player2_name': game.get_player_2().name,
+            'player1_name': players[0].name if players[0] else '...',
+            'player2_name': players[1].name if players[1] else '...'
         })
 
         return HttpResponse(json.dumps(state), content_type='application/json')

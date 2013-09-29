@@ -114,9 +114,6 @@ class Game(models.Model):
         Get last Round instance that has state
         :return: Round instance
         """
-        if not self.is_started():
-            raise GameException('Game is not started')
-
         try:
             return self.rounds.filter(scene__isnull=False).order_by('-number')[0]
         except IndexError:

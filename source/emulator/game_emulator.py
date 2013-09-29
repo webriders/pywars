@@ -1,3 +1,5 @@
+import random
+
 __all__ = ['GameEmulator']
 
 
@@ -23,7 +25,7 @@ class GameEmulator(object):
         """
         self.tick = 0
 
-        while self.tick < 1000:
+        while self.tick < 1000 and self.players[0].health > 0 and self.players[1].health > 0:
             # Perform tick
             self.tick += 1
             for player in self.players:
@@ -40,5 +42,11 @@ class GameEmulator(object):
 
             # Apply all rules for this tick
             for rule in self.rules:
-                rule.resolve(*self.players)
-                rule.resolve(*self.players[::-1])
+                # Randomize order for same actions like kick-kick /etc
+                player_number = random.randint(0, 1)
+                if player_number == 1:
+                    rule.resolve(*self.players)
+                    rule.resolve(*self.players[::-1])
+                else:
+                    rule.resolve(*self.players[::-1])
+                    rule.resolve(*self.players)

@@ -15,10 +15,6 @@ class FightingRule(Rule):
                 print '%s blocked hit' % enemy
                 return  # Enemy blocked hit
 
-            if isinstance(enemy.action, FightingAction):
-                print '%s was in the same fight state -> blocked' % enemy
-                return  # Enemy is in the same fighting state -> hit is blocked
-
             # Hit is not blocked
             print "%s received damage %d" % (enemy, player.action.damage)
             if type(player.action) is PunchingAction:
