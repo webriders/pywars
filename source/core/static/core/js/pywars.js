@@ -1,6 +1,6 @@
 pywars = window.pywars || {};
 
-$.noty.defaults.layout = 'topCenter';
+$.noty.defaults.layout = 'bottomCenter';
 $.noty.defaults.animation.speed = 200;
 $.noty.defaults.timeout = 2000;
 
