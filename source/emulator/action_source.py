@@ -19,6 +19,8 @@ class SimpleActionSource(object):
         for string in self.code.split('\n'):
             line_num += 1
             string = string.strip()
+            if not string or string.startswith('#'):
+                continue
             if string == 'player.kick()':
                 yield KickingAction()
             elif string == 'player.punch()':
@@ -37,5 +39,6 @@ class SimpleActionSource(object):
         """
         Validate code
         """
-        for action in self._generator():
-            pass
+        actions = list(self._generator())
+        if len(actions) != 10:
+            raise ValidationError('There should be exactly 10 commands')
