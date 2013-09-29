@@ -1,14 +1,12 @@
-import json
-from django.http import HttpResponse
 from django.views.generic import DetailView
 from core.models import Game
-from core.views.mixins import PlayerMixin
+from mixins import PlayerMixin, JSONResponseMixin
 
 
 __all__ = ['new_rounds_feed', 'game_state_feed']
 
 
-class NewRoundsFeed(DetailView):
+class NewRoundsFeed(DetailView, JSONResponseMixin):
     model = Game
 
     def get(self, request, *args, **kwargs):
@@ -18,12 +16,12 @@ class NewRoundsFeed(DetailView):
         game_rounds = game.get_new_rounds(last_round_number)
         rounds = [{'round': game_round.number, 'scene': game_round.scene} for game_round in game_rounds]
 
-        return HttpResponse(json.dumps(rounds), content_type='application/json')
+        return self.render_to_json_response(rounds)
 
 new_rounds_feed = NewRoundsFeed.as_view()
 
 
-class GameStateFeed(DetailView, PlayerMixin):
+class GameStateFeed(DetailView, PlayerMixin, JSONResponseMixin):
     model = Game
 
     def get(self, request, *args, **kwargs):
@@ -54,6 +52,6 @@ class GameStateFeed(DetailView, PlayerMixin):
             'players': [players[0].name if players[0] else '...', players[1].name if players[1] else '...']
         })
 
-        return HttpResponse(json.dumps(state), content_type='application/json')
+        return self.render_to_json_response(state)
 
 game_state_feed = GameStateFeed.as_view()
