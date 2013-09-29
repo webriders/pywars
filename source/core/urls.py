@@ -10,7 +10,7 @@ urlpatterns = patterns(
     url(r'^game/(?P<pk>\d+)/$', 'game_page', name='core-game-page'),
 
     # Actions
-    url(r'^game/(?P<pk>\d+)/join/$', 'join_game_action', name='core-join-game-action'),
+    url(r'^game/join/$', 'join_game_action', name='core-join-game-action'),
     url(r'^game/(?P<pk>\d+)/code/$', 'submit_code_action', name='core-submit-code-action'),
 
     # Feeders

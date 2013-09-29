@@ -12,12 +12,5 @@
 
 {% block content %}
     {% include "core/includes/players.html" %}
-
-    <form class="join-game-form" method="post">
-        {% csrf_token %}
-        <div class="username-field">
-            {% render_field form.player_username placeholder="Enter your nickname" autofocus="true" %}
-        </div>
-        <input class="button" type="submit" value="Start new game" />
-    </form>
+    {% include "core/includes/join_game_form.html" with form=join_game_form button_title="Start new game" %}
 {% endblock %}

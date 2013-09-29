@@ -1,6 +1,5 @@
-from django.shortcuts import redirect
-from django.views.generic import FormView, DetailView
-from core.forms import StartGameForm, JoinGameForm
+from django.views.generic import DetailView, TemplateView
+from core.forms import JoinGameForm
 from core.models import Game
 from core.views.mixins import PlayerMixin
 
@@ -8,16 +7,18 @@ from core.views.mixins import PlayerMixin
 __all__ = ['start_game_page', 'game_page']
 
 
-class StartGamePage(FormView, PlayerMixin):
+class StartGamePage(TemplateView):
     """
     The first step in the game workflow
     """
     template_name = 'core/game_creator_page.html'
-    form_class = StartGameForm
 
-    def form_valid(self, form):
-        game = form.save(self.get_player_id())
-        return redirect('core-game-page', pk=game.pk)
+    def get_context_data(self, **kwargs):
+        context = super(StartGamePage, self).get_context_data(**kwargs)
+        context.update({
+            'join_game_form': JoinGameForm()
+        })
+        return context
 
 start_game_page = StartGamePage.as_view()
 

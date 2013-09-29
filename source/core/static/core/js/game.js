@@ -7,9 +7,11 @@ pywars.game = {
     newRoundsUrl: '',
     player1: 'player1',
     player2: 'player2',
+    userRole: 'observer',
 
     init: function() {
         this.isRendering = false;
+        this.gameMessage = $("#game-message");
         this.joinForm = $("#join-game-form");
         this.codeForm = $("#code-form");
         this.gameField = $("#game-field");
@@ -22,8 +24,8 @@ pywars.game = {
         var self = this;
 
         this.initArena();
+        this.updateState();
         setInterval(function() { self.updateState() }, 3 * 1000);
-        self.updateState();
 
         this.joinForm.submit(function(e) {
             e.preventDefault();
@@ -32,8 +34,6 @@ pywars.game = {
 
         this.codeForm.submit(function(e) {
             e.preventDefault();
-
-            var code = self.codeEditor.getValue();
 
             $.post(self.submitCodeUrl, $(this).serialize(), function(data) {
                 self.disableCodeForm();
@@ -70,9 +70,8 @@ pywars.game = {
                         self.state = data.state;
                         break;
                     case 'finished':
-                        console.log(self.isRendering)
                         if(self.isRendering == false) {
-                            self.finishGame(); /* finish only after all rendering performed */
+                            self.finishGame(data.winner); /* finish only after all rendering performed */
                             self.state = data.state;
                         }
 
@@ -96,7 +95,7 @@ pywars.game = {
     },
 
     startGame: function() {
-        this.joinForm.hide();
+        this.gameMessage.hide();
         this.gameField.fadeIn();
         this.codeEditor.refresh();
         this.initArena();
@@ -126,21 +125,33 @@ pywars.game = {
         });
     },
 
-    finishGame: function() {
-        alert('game is finished');
+    finishGame: function(winner) {
+        this.gameField.addClass('readonly');
+
+        var winnerMessageBlock = this.gameField.find('.game-winner'),
+            winnerMessage = winnerMessageBlock.find('.message');
+
+        if (winner)
+            winnerMessage.text(winnerMessage.text().replace('username', winner));
+        else
+            winnerMessage.text("Seems like you both are good enough. Tie!");
+
+        winnerMessageBlock.fadeIn(400, function() {
+            $(window).trigger('resize');
+        });
     },
 
     disableCodeForm: function() {
-        var self = this;
-
-        self.codeEditor.setOption('readOnly', 'nocursor');
-        self.codeForm.css('opacity', 0.3);
+        if (this.codeEditor) {
+            this.codeEditor.setOption('readOnly', 'nocursor');
+            this.codeForm.css('opacity', 0.3);
+        }
     },
 
     enableCodeform: function() {
-        var self = this;
-
-        self.codeEditor.setOption('readOnly', false);
-        self.codeForm.css('opacity', 1);
+        if (this.codeEditor) {
+            this.codeEditor.setOption('readOnly', false);
+            this.codeForm.css('opacity', 1);
+        }
     }
 };

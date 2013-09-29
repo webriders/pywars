@@ -1,0 +1,10 @@
+{% load widget_tweaks %}
+
+<form id="join-game-form" class="join-game-form" method="post" action="{% url 'core-join-game-action' %}">
+    {% csrf_token %}
+    {{ form.game }}
+    <div class="username-field">
+        {% render_field form.player_username placeholder="Enter your nickname" autofocus="true" %}
+    </div>
+    <input class="button" type="submit" value="{{ button_title }}" />
+</form>
