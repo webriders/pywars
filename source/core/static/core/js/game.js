@@ -134,7 +134,7 @@ pywars.game = {
         if (winner)
             winnerMessage.text(winnerMessage.text().replace('username', winner));
         else
-            winnerMessage.text("Seems like you are both good enough. Tie!");
+            winnerMessage.text("Seems like you both are good enough. Tie!");
 
         winnerMessageBlock.fadeIn();
     },
