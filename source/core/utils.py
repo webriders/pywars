@@ -2,14 +2,6 @@ import json
 from django.http import HttpResponse
 
 
-class PlayerMixin(object):
-    """
-    Provides utils for working with player object inside views
-    """
-    def get_player_id(self):
-        return self.request.session.session_key
-
-
 class JSONResponseMixin(object):
     """
     A mixin that can be used to render a JSON response.
