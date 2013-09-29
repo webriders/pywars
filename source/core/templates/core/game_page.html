@@ -4,7 +4,7 @@
 {% load i18n %}
 {% load widget_tweaks %}
 
-{% block page_class %}game-page {% if game.is_started and user_role != game.ROLE_OBSERVER %}started{% endif %}{% endblock %}
+{% block page_class %}game-page {% if game.is_started %}started{% endif %}{% endblock %}
 
 {% block static %}
     {{ block.super }}
@@ -40,8 +40,6 @@
         {% elif user_role == game.ROLE_PLAYER_2 %}
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
             {% include 'core/includes/join_game_form.html' with form=join_game_form button_title="Join game" %}
-        {% else %}
-            <p>{% trans "Sorry but game has already started" %}</p>
         {% endif %}
     </section>
 
