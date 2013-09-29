@@ -1,4 +1,3 @@
-from django.core.urlresolvers import reverse
 from django.db import models, IntegrityError, transaction
 from django.db.models.signals import post_save
 from django.utils import timezone
@@ -85,7 +84,7 @@ class Game(models.Model):
         Check if games is ended
         :return: True if game is ended
         """
-        return self.time_ended is not None
+        return self.time_finished is not None
 
     def get_result(self):
         """
@@ -142,6 +141,15 @@ class Game(models.Model):
             GameSnippet.objects.create(game_round=current_round, player=player, code=code)
         except IntegrityError:
             raise GameException('Code for this round was already submitted')
+
+    def get_current_code(self, player_id):
+        if not self.is_started():
+            raise GameException('Game is not started')
+
+        try:
+            return GameSnippet.objects.get(game_round=self.rounds.order_by('-number')[0], player__ident=player_id).code
+        except GameSnippet.DoesNotExist:
+            return None
 
 
 class Player(models.Model):
@@ -217,7 +225,7 @@ def emulate_round(sender, **kwargs):
 
         print 'here'
         game_round.scene, player1.state, player2.state, winner = \
-            service.emulate(player1_code, player2_code)
+            service.emulate(player1_code, player2_code, player1.state or None, player2.state or None)
         print game_round.scene
 
         if winner > 0 or game_round.number >= Game.MAX_ROUNDS_COUNT:
