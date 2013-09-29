@@ -5,13 +5,12 @@ pywars.Arena = new function () {
     "1": {x: 250, y: 210},
     "2": {x: 300, y: 210}
   };
-  var TICKER_DELAY = 500;
+  var TICKER_DELAY = 700;
+  var FPS = 10;
   var players = {};
   var stage;
   var timer = null;
   var step = 0;
-  var postpone = ['punching', 'kicking', 'blocking'];
-  var postponed = [];
   var $pl1health;
   var $pl2health;
   var $canvas;
@@ -47,13 +46,6 @@ pywars.Arena = new function () {
 
   function onTick(scenario,step) {
     var currentStep = scenario[step];
-    for (var i = 0; i < postponed.length; i++) {
-      var action = postponed.shift();
-      handleScenarioEvent(action);
-      delete action.postponed;
-      i -= 1;
-    }
-
     if (currentStep) {
       for (var i = 0; i < currentStep.length; i++) {
         var event = currentStep[i];
@@ -71,11 +63,6 @@ pywars.Arena = new function () {
     'frame': function (event) {
       var player = event.player;
       var state = event.state;
-      if ($.inArray(state, postpone) != -1 && !event.postponed) {
-        event.postponed = true;
-        postponed.push(event);
-        return;
-      }
       players[player].setState(state);
     },
     'health': function (event) {
@@ -100,8 +87,8 @@ pywars.Arena = new function () {
     $canvas.get(0).height =  height;
 
     START_POSITION = {
-      "1": {x: width / 2 - 75, y: height / 2 + 50},
-      "2": {x:  width / 2 - 35, y: height / 2 + 50}
+      "1": {x: width / 2 - 70, y: height / 2 + 50},
+      "2": {x:  width / 2 - 40, y: height / 2 + 50}
     };
   }
 
@@ -113,7 +100,7 @@ pywars.Arena = new function () {
     resizeCanvas();
     $(window).resize(resizeCanvas)
     stage = new createjs.Stage(CANVAS_ID);
-    createjs.Ticker.setFPS(30);
+    createjs.Ticker.setFPS(FPS);
     createjs.Ticker.useRAF = true;
     createjs.Ticker.addEventListener("tick", updateStage);
   };

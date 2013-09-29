@@ -11,6 +11,5 @@ $(function(){
   }, 1000);
 
   $('#stage').on('scenario.end', function(){
-    alert('Last tick')
   })
 })

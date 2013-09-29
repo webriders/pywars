@@ -37,21 +37,26 @@ pywars.Fighter = function (playerName, order) {
       [0, 0, 57, 129, 6, stanceDelta ,0],[57, 0, 57, 129, 6, stanceDelta ,0]
     ],
     animations: {
-      stance: [0, 8, "stance", 0.1],
-      punching: [9, 16, "waiting", 0.4],
-      kicking: [17, 26, "waiting", 0.5],
-      being_hit: {
-        frames: [27,28,29,30,30,30,29,28],
+      stance: [0, 8, "stance", 1],
+      punching: [9, 16, "waiting", 1],
+      kicking: [17, 26, "waiting", 1],
+      being_hit_by_kick: {
+        frames: [31,32,33,34,35,27,28,30,30,30],
         next: "waiting",
-        speed: 0.4
+        speed: 1
       },
-      waiting: [31, 39, "waiting", 0.4],
+      being_hit_by_punch: {
+        frames: [31,32,27,27, 32, 27],
+        next: "waiting",
+        speed: 1
+      },
+      waiting: [31, 39, "waiting", 1],
       blocking: {
         frames: [40,41,42,42,42,42,42,42],
         next: "blocking_end",
-        speed: 0.4
+        speed: 1
       },
-      blocking_end: [43, 44, "waiting", 0.4]
+      blocking_end: [43, 44, "waiting", 1]
     }
   };
 
