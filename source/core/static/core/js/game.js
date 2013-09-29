@@ -90,8 +90,8 @@ pywars.game = {
                 self.current_round = data.round;
             }
 
-            if (self.oppponent_submitted != data.is_opponent_submitted && data.is_opponent_submitted == true && self.userRole != 'observer') {
-                self.opponent_submitted = false;
+            if (self.opponent_submitted != data.is_opponent_submitted && data.is_opponent_submitted == true && self.userRole != 'observer') {
+                self.opponent_submitted = true;
                 pywars.messages.info('Opponent submitted code!');
             }
 
