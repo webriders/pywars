@@ -1,8 +1,6 @@
 var pywars = pywars || {};
 pywars.Arena = new function () {
   var CANVAS_ID = 'stage';
-  var CANVAS_WITH = 700;
-  var CANVAS_HEIGHT = 500;
   var START_POSITION = {
     "1": {x: 250, y: 210},
     "2": {x: 300, y: 210}
@@ -40,6 +38,10 @@ pywars.Arena = new function () {
   }
 
   function updateStage(event) {
+    players[1].getAnimation().x = START_POSITION[1].x;
+    players[1].getAnimation().y = START_POSITION[1].y;
+    players[2].getAnimation().x = START_POSITION[2].x;
+    players[2].getAnimation().y = START_POSITION[2].y;
     stage.update(event);
   }
 
@@ -90,14 +92,27 @@ pywars.Arena = new function () {
     newGame = false;
   }
 
+  function resizeCanvas() {
+    var $canvasContainer = $canvas.parents('.game-player');
+    var width = $canvasContainer.width();
+    var height = $canvasContainer.height();
+    $canvas.get(0).width =  width;
+    $canvas.get(0).height =  height;
+
+    START_POSITION = {
+      "1": {x: width / 2 - 75, y: height / 2 + 50},
+      "2": {x:  width / 2 - 35, y: height / 2 + 50}
+    };
+  }
+
   this.initStage = function () {
-    document.getElementById(CANVAS_ID).width = CANVAS_WITH;
-    document.getElementById(CANVAS_ID).height = CANVAS_HEIGHT;
+    $canvas = $('#' + CANVAS_ID);
     $pl1health = $('.canvas-container .player-1 .health div');
     $pl2health = $('.canvas-container .player-2 .health div');
-    $canvas = $('#' + CANVAS_ID);
+    $('.canvas-container .player-container').show();
+    resizeCanvas();
+    $(window).resize(resizeCanvas)
     stage = new createjs.Stage(CANVAS_ID);
-
     createjs.Ticker.setFPS(30);
     createjs.Ticker.useRAF = true;
     createjs.Ticker.addEventListener("tick", updateStage);
