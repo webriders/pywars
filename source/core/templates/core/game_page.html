@@ -22,6 +22,7 @@
             pywars.game.newRoundsUrl = "{% url 'core-new-rounds-feed' game.pk 0 %}";
             pywars.game.player1 = "{{ game.get_player_1 }}";
             pywars.game.player2 = "{{ game.get_player_2 }}";
+            pywars.game.userRole = "{{ user_role }}";
             pywars.game.init();
         });
     </script>
@@ -45,7 +46,7 @@
             </div>
             <input class="button" type="submit" value="Join game" />
         {% else %}
-            {% trans "Sorry but game has already started" %}
+            {% trans "Sorry but game has already started" %}<br>
         {% endif %}
     </form>
 

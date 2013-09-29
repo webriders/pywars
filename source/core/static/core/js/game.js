@@ -7,8 +7,12 @@ pywars.game = {
     newRoundsUrl: '',
     player1: 'player1',
     player2: 'player2',
+    userRole: 'observer',
 
     init: function() {
+        if (this.userRole == 'observer')
+            return;
+
         this.isRendering = false;
         this.joinForm = $("#join-game-form");
         this.codeForm = $("#code-form");
@@ -22,8 +26,8 @@ pywars.game = {
         var self = this;
 
         this.initArena();
+        this.updateState();
         setInterval(function() { self.updateState() }, 3 * 1000);
-        self.updateState();
 
         this.joinForm.submit(function(e) {
             e.preventDefault();
@@ -32,8 +36,6 @@ pywars.game = {
 
         this.codeForm.submit(function(e) {
             e.preventDefault();
-
-            var code = self.codeEditor.getValue();
 
             $.post(self.submitCodeUrl, $(this).serialize(), function(data) {
                 self.disableCodeForm();
@@ -70,7 +72,6 @@ pywars.game = {
                         self.state = data.state;
                         break;
                     case 'finished':
-                        console.log(self.isRendering)
                         if(self.isRendering == false) {
                             self.finishGame(); /* finish only after all rendering performed */
                             self.state = data.state;
