@@ -3,9 +3,11 @@ pywars = window.pywars || {};
 
 pywars.game = {
     stateUrl: '', // will be defined inside template
+    submitCodeUrl: '',
 
     init: function() {
         this.joinForm = $("#join-form");
+        this.codeForm = $("#code-form");
         this.gameField = $("#game-field");
         this.codeEditorField = $('#code-editor');
         this.codeEditor = this.initCodeEditor();
@@ -19,6 +21,15 @@ pywars.game = {
         this.joinForm.submit(function(e) {
             e.preventDefault();
             self.joinGame();
+        });
+
+        this.codeForm.submit(function(e) {
+            e.preventDefault();
+            var code = self.codeEditor.getValue();
+
+            $.post(self.submitCodeUrl, $(this).serialize(), function(data) {
+                console.log(data);
+            });
         });
     },
 
