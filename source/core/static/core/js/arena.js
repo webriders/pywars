@@ -12,8 +12,8 @@ pywars.Arena = new function () {
   var stage;
   var timer = null;
   var step = 0;
-  var $pl1health;
-  var $pl2health;
+  var $pl1;
+  var $pl2;
   var $canvas;
   var scenarios = [];
   var newGame = true;
@@ -90,8 +90,12 @@ pywars.Arena = new function () {
       players[player].setState(state);
     },
     'health': function (event) {
-      $pl1health.css('width', event.player1 + '%');
-      $pl2health.css('width', event.player2 + '%');
+      $pl1.find('.health div').css('width', event.player1 + '%');
+      $pl2.find('.health div').css('width', event.player2 + '%');
+    },
+    'energy': function(event) {
+      $pl1.find('.energy div').css('width', event.player1 + '%');
+      $pl2.find('.energy div').css('width', event.player2 + '%');
     }
   };
 
@@ -122,8 +126,8 @@ pywars.Arena = new function () {
 
   this.initStage = function () {
     $canvas = $('#' + CANVAS_ID);
-    $pl1health = $('.canvas-container .player-1 .health div');
-    $pl2health = $('.canvas-container .player-2 .health div');
+    $pl1 = $('.canvas-container .player-1');
+    $pl2 = $('.canvas-container .player-2');
     $('.canvas-container .player-container').show();
     resizeCanvas();
     $(window).resize(resizeCanvas)

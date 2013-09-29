@@ -40,16 +40,17 @@
             font-size: 1.2em;
         }
 
-        .canvas-container .health {
+        .canvas-container .health,
+        .canvas-container .energy{
             border: solid 2px grey;
             border-radius: 5px;
             margin-top: 10px;
             width: 100%;
-            background-color: red;
             height: 15px;
         }
 
-        .canvas-container .health div {
+        .canvas-container .health div,
+        .canvas-container .energy div{
             width: 100%;
             height: 15px;
             background-color: green;
@@ -58,7 +59,12 @@
             transition: width 1s;
         }
 
-        .canvas-container .player-2 .health div {
+        .canvas-container .energy div{
+            background-color: blue;
+        }
+
+        .canvas-container .player-2 .health div,
+        .canvas-container .player-2 .energy div {
             float: right;
         }
 
@@ -84,11 +90,17 @@
                     <div class="health">
                         <div></div>
                     </div>
+                    <div class="energy">
+                        <div></div>
+                    </div>
                 </div>
 
                 <div class=" player-container player-2">
                     <div class="name">Player 2</div>
                     <div class="health">
+                        <div></div>
+                    </div>
+                    <div class="energy">
                         <div></div>
                     </div>
                 </div>
