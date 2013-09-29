@@ -8,6 +8,7 @@ class SimpleActionSource(object):
     """
     Very very simple action source, that parses only our commands using regexp
     """
+    MAX_COMMAND_COUNT = 10
 
     def __init__(self, code):
         self.code = code
@@ -19,6 +20,8 @@ class SimpleActionSource(object):
         for string in self.code.split('\n'):
             line_num += 1
             string = string.strip()
+            if not string or string.startswith('#'):
+                continue
             if string == 'player.kick()':
                 yield KickingAction()
             elif string == 'player.punch()':
@@ -37,5 +40,7 @@ class SimpleActionSource(object):
         """
         Validate code
         """
-        for action in self._generator():
-            pass
+        actions = list(self._generator())
+
+        if len(actions) != self.MAX_COMMAND_COUNT:
+            raise ValidationError('There should be exactly %d commands' % self.MAX_COMMAND_COUNT)
