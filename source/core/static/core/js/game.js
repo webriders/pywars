@@ -82,12 +82,12 @@ pywars.game = {
             }
 
             if(data.round != self.submittedRound && !self.isRendering) {
-                self.opponentSubmittedShown = false;
                 self.enableCodeForm();
             }
             if(data.round != self.currentRound && data.round != 0 && !self.isRendering && data.state == 'round') {
                 pywars.messages.info('Round ' + (parseInt(data.round)+1) + ' started');
                 self.currentRound = data.round;
+                self.opponentSubmittedShown = false;
             }
 
             if (!self.opponentSubmittedShown && data.isOpponentSubmitted && self.userRole != 'observer' && data.state == 'round') {
