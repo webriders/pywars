@@ -32,10 +32,16 @@ class GameStateFeed(DetailView, PlayerMixin):
 
         if game.is_finished():
             winner = game.get_result()
+            if winner is None:
+                winner_player = None
+            elif winner.role == Game.ROLE_PLAYER_1:
+                winner_player = 1
+            else:
+                winner_player = 2
 
             state = {
                 'state': 'finished',
-                'winner': winner.name if winner else None
+                'winner': winner_player
             }
         elif game.is_started():
             state = {
@@ -51,8 +57,7 @@ class GameStateFeed(DetailView, PlayerMixin):
 
         state.update({
             'round': last_round.number if last_round is not None else 0,
-            'player1_name': players[0].name if players[0] else '...',
-            'player2_name': players[1].name if players[1] else '...'
+            'players': [players[0].name if players[0] else '...', players[1].name if players[1] else '...']
         })
 
         return HttpResponse(json.dumps(state), content_type='application/json')

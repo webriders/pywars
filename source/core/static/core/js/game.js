@@ -53,8 +53,8 @@ pywars.game = {
         var self = this;
 
         $.get(this.stateUrl, function(data) {
-            self.player1 = data.player1_name;
-            self.player2 = data.player2_name;
+            self.player1 = data.players[0]
+            self.player2 = data.players[1];
 
             if(data.round != self.submitted_round)
                 self.enableCodeform();
@@ -92,7 +92,7 @@ pywars.game = {
         pywars.Arena.addFighter(f2);
         pywars.Arena.addFighter(f1);
 
-        $('#stage').on('scenario.end', function(){ self.isRendering = false; });
+        $('#stage').on('scenarios.end', function(){ self.isRendering = false; });
     },
 
     startGame: function() {
@@ -119,8 +119,10 @@ pywars.game = {
         self.isRendering = true;
 
         $.get(url, {}, function(data) {
-            var round = data[0];
-            pywars.Arena.play($.parseJSON(round['scene']));
+            for(var i in data) {
+                var round = data[i];
+                pywars.Arena.play($.parseJSON(round['scene']));
+            }
         });
     },
 
