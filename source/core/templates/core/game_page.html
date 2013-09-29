@@ -22,7 +22,6 @@
             pywars.game.newRoundsUrl = "{% url 'core-new-rounds-feed' game.pk 0 %}";
             pywars.game.player1 = "{{ game.get_player_1 }}";
             pywars.game.player2 = "{{ game.get_player_2 }}";
-            pywars.game.userRole = "{{ user_role }}";
             pywars.game.init();
         });
     </script>
@@ -46,7 +45,7 @@
         {% endif %}
     </section>
 
-    <section id="game-field" class="game-field">
+    <section id="game-field" class="game-field {% if game.is_finished or user_role == game.ROLE_OBSERVER %}readonly{% endif %}">
         <form class="game-editor" id="code-form">
             {% csrf_token %}
             <textarea id="code-editor" name="code"></textarea>
@@ -69,6 +68,9 @@
                 </div>
                 <canvas id="stage"></canvas>
             </div>
+        </div>
+        <div class="game-winner">
+            <div class="message">username wins!</div>
         </div>
     </section>
 {% endblock %}

@@ -10,9 +10,6 @@ pywars.game = {
     userRole: 'observer',
 
     init: function() {
-        if (this.userRole == 'observer')
-            return;
-
         this.isRendering = false;
         this.gameMessage = $("#game-message");
         this.joinForm = $("#join-game-form");
@@ -74,7 +71,7 @@ pywars.game = {
                         break;
                     case 'finished':
                         if(self.isRendering == false) {
-                            self.finishGame(); /* finish only after all rendering performed */
+                            self.finishGame(data.winner); /* finish only after all rendering performed */
                             self.state = data.state;
                         }
 
@@ -128,21 +125,31 @@ pywars.game = {
         });
     },
 
-    finishGame: function() {
-        alert('game is finished');
+    finishGame: function(winner) {
+        this.gameField.addClass('readonly');
+
+        var winnerMessageBlock = this.gameField.find('.game-winner'),
+            winnerMessage = winnerMessageBlock.find('.message');
+
+        if (winner)
+            winnerMessage.text(winnerMessage.text().replace('username', winner));
+        else
+            winnerMessage.text("Seems like you are both good enough. Tie!");
+
+        winnerMessageBlock.fadeIn();
     },
 
     disableCodeForm: function() {
-        var self = this;
-
-        self.codeEditor.setOption('readOnly', 'nocursor');
-        self.codeForm.css('opacity', 0.3);
+        if (this.codeEditor) {
+            this.codeEditor.setOption('readOnly', 'nocursor');
+            this.codeForm.css('opacity', 0.3);
+        }
     },
 
     enableCodeform: function() {
-        var self = this;
-
-        self.codeEditor.setOption('readOnly', false);
-        self.codeForm.css('opacity', 1);
+        if (this.codeEditor) {
+            this.codeEditor.setOption('readOnly', false);
+            this.codeForm.css('opacity', 1);
+        }
     }
 };

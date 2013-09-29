@@ -32,16 +32,10 @@ class GameStateFeed(DetailView, PlayerMixin):
 
         if game.is_finished():
             winner = game.get_result()
-            if winner is None:
-                winner_player = None
-            elif winner.role == Game.ROLE_PLAYER_1:
-                winner_player = 1
-            else:
-                winner_player = 2
 
             state = {
                 'state': 'finished',
-                'winner': winner_player
+                'winner': winner.name if winner else None
             }
         elif game.is_started():
             state = {

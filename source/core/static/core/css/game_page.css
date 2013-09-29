@@ -8,12 +8,51 @@
 
 .game-field {
     display: none;
+    position: relative;
     width: 100%;
     height: 100%;
 
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+}
+
+.game-field .game-player {
+    -webkit-transition: width 0.5s;
+    -moz-transition: width 0.5s;
+    -ms-transition: width 0.5s;
+    -o-transition: width 0.5s;
+    transition: width 0.5s;
+}
+
+.game-field.readonly .game-editor {
+    display: none;
+}
+
+.game-field.readonly .game-player {
+    width: 100%;
+}
+
+.game-field .game-winner {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    font-size: 24px;
+    color: #fff;
+}
+
+.game-field .game-winner .message {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 50%;
+    margin-top: -24px;
+    text-align: center;
 }
 
 .game-field .game-editor {
