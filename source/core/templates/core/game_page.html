@@ -20,6 +20,7 @@
             pywars.game.stateUrl = "{% url 'core-game-state-feed' game.pk %}";
             pywars.game.submitCodeUrl = "{% url 'core-submit-code-action' game.pk %}";
             pywars.game.newRoundsUrl = "{% url 'core-new-rounds-feed' game.pk 0 %}";
+            pywars.game.userRole = "{{ user_role }}";
             pywars.game.player1 = "{{ game.get_player_1 }}";
             pywars.game.player2 = "{{ game.get_player_2 }}";
             pywars.game.init();
@@ -74,7 +75,17 @@
             </div>
         </div>
         <div class="game-winner">
-            <div class="message">username wins!</div>
+            <div class="message">
+                <span class="placeholder">username wins!</span>
+                <div class="join-game-form">
+                    <p class="share-message observer">{% trans "Want to share it?" %}</p>
+                    <p class="share-message winner">{% trans "Want to show how did you win this looser?" %}</p>
+                    <p class="share-message looser">{% trans "Don't cry, better share it to others :)" %}</p>
+                    <div class="username-field">
+                        <input type="text" value="http://{{ request.META.HTTP_HOST }}{{ request.path }}" onclick="$(this).select()" />
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}
