@@ -6,7 +6,7 @@ pywars.game = {
     submitCodeUrl: '',
 
     init: function() {
-        this.joinForm = $("#join-form");
+        this.joinForm = $("#join-game-form");
         this.codeForm = $("#code-form");
         this.gameField = $("#game-field");
         this.codeEditorField = $('#code-editor');

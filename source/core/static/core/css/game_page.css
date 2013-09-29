@@ -2,7 +2,7 @@
     display: block;
 }
 
-.game-page.started .join-form {
+.game-page.started .join-game-form {
     display: none;
 }
 
