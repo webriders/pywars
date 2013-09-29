@@ -42,7 +42,9 @@ class GameEmulator(object):
                     continue
 
                 # Queue next action if player has finished action
-                if player.action.tick >= player.action.duration and self.players[0].health > 0 and self.players[1].health > 0:
+                # Don't queue any action if one of player is dead
+                if player.action.tick >= player.action.duration \
+                    and self.players[0].health > 0 and self.players[1].health > 0:
                     # Need to get next state
                     player.queue_action(player.action_source.next())
                     changed = True
