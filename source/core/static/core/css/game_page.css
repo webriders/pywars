@@ -2,12 +2,8 @@
     display: block;
 }
 
-.game-page.started .join-game-form {
+.game-page.started .game-message {
     display: none;
-}
-
-.game-page .join-message {
-    padding: 10px 0;
 }
 
 .game-field {
@@ -115,4 +111,13 @@
     margin-left: -87px;
     width: 174px;
     height: 120px;
+}
+
+.game-message {
+    text-align: center;
+    font-size: 16px;
+}
+
+.game-message p {
+    margin: 10px;
 }

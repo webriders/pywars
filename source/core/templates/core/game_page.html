@@ -29,26 +29,22 @@
 {% endblock %}
 
 {% block content %}
-    <form id="join-game-form" class="join-game-form" method="post" action="{% url 'core-join-game-action' game.pk %}">
+    <section id="game-message" class="game-message">
         {% if user_role == game.ROLE_PLAYER_1 %}
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
-            <div class="join-message">{% trans "Share link to this game with your oponent" %}</div>
-            <div class="username-field">
-                <input type="text" value="http://{{ request.META.HTTP_HOST }}{{ request.path }}" onclick="$(this).select()" />
+            <p>{% trans "Share link to this game with your oponent" %}</p>
+            <div class="join-game-form">
+                <div class="username-field">
+                    <input type="text" value="http://{{ request.META.HTTP_HOST }}{{ request.path }}" onclick="$(this).select()" />
+                </div>
             </div>
         {% elif user_role == game.ROLE_PLAYER_2 %}
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
-            {% csrf_token %}
-            {% render_field join_game_form.game %}
-            <div class="username-field">
-                {{ join_game_form.game }}
-                {% render_field join_game_form.player_username placeholder="Enter your nickname" autofocus="true" %}
-            </div>
-            <input class="button" type="submit" value="Join game" />
+            {% include 'core/includes/join_game_form.html' with form=join_game_form button_title="Join game" %}
         {% else %}
-            {% trans "Sorry but game has already started" %}<br>
+            <p>{% trans "Sorry but game has already started" %}</p>
         {% endif %}
-    </form>
+    </section>
 
     <section id="game-field" class="game-field">
         <form class="game-editor" id="code-form">

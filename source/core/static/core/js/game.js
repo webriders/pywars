@@ -14,6 +14,7 @@ pywars.game = {
             return;
 
         this.isRendering = false;
+        this.gameMessage = $("#game-message");
         this.joinForm = $("#join-game-form");
         this.codeForm = $("#code-form");
         this.gameField = $("#game-field");
@@ -97,7 +98,7 @@ pywars.game = {
     },
 
     startGame: function() {
-        this.joinForm.hide();
+        this.gameMessage.hide();
         this.gameField.fadeIn();
         this.codeEditor.refresh();
         this.initArena();

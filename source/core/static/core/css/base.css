@@ -60,26 +60,3 @@ input:focus {
 .page-footer .copyright {
     margin-top: 20px;
 }
-
-.join-game-form {
-    text-align: center;
-}
-
-.join-game-form .username-field {
-    margin-bottom: 20px;
-}
-
-.join-game-form .username-field input {
-    text-align: center;
-    width: 300px;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px 15px;
-    font: 18px arial, sans-serif;
-    border: 5px solid #000;
-    color: #fff;
-    border-radius: 30px;
-}
-
-.join-game-form .username-field input:focus {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
