@@ -36,8 +36,10 @@ pywars.game = {
             e.preventDefault();
 
             $.post(self.submitCodeUrl, $(this).serialize(), function(data) {
-                self.disableCodeForm();
-                self.submitted_round = self.lastRound;
+                if (data.status == 'success') {
+                    self.disableCodeForm();
+                    self.submitted_round = self.lastRound;
+                }
             });
         });
     },
