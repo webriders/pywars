@@ -1,6 +1,8 @@
 {% extends 'core/base.html' %}
 
 {% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
 
 {% block page_class %}game-page {% if game.is_started and user_role != game.ROLE_OBSERVER %}started{% endif %}{% endblock %}
 
@@ -23,15 +25,22 @@
 {% endblock %}
 
 {% block content %}
-    <form id="join-form" class="join-form" method="post" action="{% url 'core-join-game-action' game.pk %}">
+    <form id="join-game-form" class="join-game-form" method="post" action="{% url 'core-join-game-action' game.pk %}">
         {% if user_role == game.ROLE_PLAYER_1 %}
-            {{ game.get_player_1 }} vs Waiting for oponent...
+            {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
+            <div class="join-message">{% trans "Share link to this game with your oponent" %}</div>
+            <div class="username-field">
+                <input type="text" value="http://{{ request.META.HTTP_HOST }}{{ request.path }}" onclick="  " />
+            </div>
         {% elif user_role == game.ROLE_PLAYER_2 %}
+            {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
             {% csrf_token %}
-            {{ join_game_form }}
-            <input type="submit" value="Join game" />
+            <div class="username-field">
+                {% render_field join_game_form.player_username placeholder="Enter your nickname" autofocus="true" %}
+            </div>
+            <input class="button" type="submit" value="Join game" />
         {% else %}
-            Sorry but game has started already
+            {% trans "Sorry but game has already started" %}
         {% endif %}
     </form>
 

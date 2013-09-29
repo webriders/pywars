@@ -1,0 +1,42 @@
+.players {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.players .player {
+    display: inline-block;
+    position: relative;
+}
+
+.players .player .thumbnail {
+    border: 5px solid #000;
+    border-radius: 200px;
+    height: 200px;
+    width: 200px;
+}
+
+.players .player:first-child .nickname {
+    left: auto;
+    right: 250px;
+}
+
+.players .player .nickname {
+    position: absolute;
+    top: 0;
+    left: 250px;
+    right: auto;
+    font-size: 20px;
+    color: #fff;
+    line-height: 200px;
+    white-space: nowrap;
+}
+
+.players .delimiter {
+    display: inline-block;
+    font-size: 20px;
+    line-height: 200px;
+    vertical-align: top;
+    padding: 0 30px;
+    text-transform: uppercase;
+    color: #fff;
+}
