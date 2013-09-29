@@ -149,6 +149,14 @@ class Game(models.Model):
         except GameSnippet.DoesNotExist:
             return None
 
+    def is_opponent_submitted(self, player_id):
+        try:
+            GameSnippet.objects.exclude(player__ident=player_id).get(game_round=self.rounds.order_by('-number')[0])
+        except GameSnippet.DoesNotExist:
+            return False
+
+        return True
+
 
 class Player(models.Model):
     """
