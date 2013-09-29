@@ -89,10 +89,9 @@ pywars.game = {
                 pywars.messages.info('Round ' + (parseInt(data.round)+1) + ' started');
                 self.current_round = data.round;
             }
-            console.log(data.is_opponent_submitted)
-            console.log(data)
+
             if (self.oppponent_submitted != data.is_opponent_submitted && data.is_opponent_submitted == true && self.userRole != 'observer') {
-                self.opponent_submitted = true;
+                self.opponent_submitted = false;
                 pywars.messages.info('Opponent submitted code!');
             }
 
