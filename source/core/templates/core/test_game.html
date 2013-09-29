@@ -13,10 +13,84 @@
         #stage {
             background: url({% static 'core/assets/arenas/arena-1.jpg' %}) center bottom;
         }
+
+        .canvas-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        .canvas-container .player-container {
+            position: absolute;
+            top: 10px;
+
+            width: 200px;
+        }
+
+        .canvas-container .player-1 {
+            left: 20px;
+        }
+
+        .canvas-container .player-2 {
+            right: 20px;
+            text-align: right;
+        }
+
+        .canvas-container .name {
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .canvas-container .health {
+            border: solid 2px grey;
+            border-radius: 5px;
+            margin-top: 10px;
+            width: 100%;
+            background-color: red;
+            height: 15px;
+        }
+
+        .canvas-container .health div {
+            width: 100%;
+            height: 15px;
+            background-color: green;
+            -moz-transition: width 1s 1s;
+            -webkit-transition: width 1s;
+            transition: width 1s;
+        }
+
+        .canvas-container .player-2 .health div {
+            float: right;
+        }
+
+        .canvas-container .fight {
+            position: absolute;
+            left: 50%;
+            top: 100px;
+            margin-left: -87px;
+            width: 174px;
+            height: 120px;
+        }
+
     </style>
 {% endblock %}
 
 {% block content %}
-    <canvas id="stage"></canvas>
-    <script src="{% static 'core/js/init-fighters.js' %}"></script>
+    <div class="canvas-container">
+        <div class="canvas-container">
+            <div class=" player-container player-1">
+                <div class="name">Player 1</div>
+                <div class="health">
+                    <div></div>
+                </div>
+            </div>
+
+            <div class=" player-container player-2">
+                <div class="name">Player 2</div>
+                <div class="health">
+                    <div></div>
+                </div>
+            </div>
+            <canvas id="stage"></canvas>
+        </div>
+        <script src="{% static 'core/js/init-fighters.js' %}"></script>
 {% endblock %}

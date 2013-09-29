@@ -1,10 +1,10 @@
-var Pywars = {};
-Pywars.Arena = new function () {
+var pywars = pywars || {};
+pywars.Arena = new function () {
   var CANVAS_ID = 'stage';
   var CANVAS_WITH = 700;
   var CANVAS_HEIGHT = 500;
   var START_POSITION = {
-    "1": {x: 260, y: 210},
+    "1": {x: 250, y: 210},
     "2": {x: 300, y: 210}
   };
   var TICKER_DELAY = 500;
@@ -14,6 +14,11 @@ Pywars.Arena = new function () {
   var step = 0;
   var postpone = ['punching', 'kicking', 'blocking'];
   var postponed = [];
+  var $pl1health;
+  var $pl2health;
+  var $canvas;
+
+  var newGame = true;
 
   function initTimer(scenario) {
     if (timer) {
@@ -22,11 +27,15 @@ Pywars.Arena = new function () {
     }
 
     timer = setInterval(function () {
-      step += 1;
       onTick(scenario,step);
-      if (step == 14) {
-        step = 0
+      step += 1;
+
+      if (step > scenario.lastTick) {
+        $canvas.trigger('scenario.end');
+        clearInterval(timer);
+        step = 0;
       }
+
     }, TICKER_DELAY)
   }
 
@@ -68,12 +77,25 @@ Pywars.Arena = new function () {
       players[player].setState(state);
     },
     'health': function (event) {
+      $pl1health.css('width', event.player1 + '%');
+      $pl2health.css('width', event.player2 + '%');
     }
   };
+
+  function showSplash() {
+    $('.canvas-container').append('<img src="/static/core/assets/fight.gif" class="fight" />');
+    setTimeout(function(){
+      $('.canvas-container .fight').remove()
+    },1000);
+    newGame = false;
+  }
 
   this.initStage = function () {
     document.getElementById(CANVAS_ID).width = CANVAS_WITH;
     document.getElementById(CANVAS_ID).height = CANVAS_HEIGHT;
+    $pl1health = $('.canvas-container .player-1 .health div');
+    $pl2health = $('.canvas-container .player-2 .health div');
+    $canvas = $('#' + CANVAS_ID);
     stage = new createjs.Stage(CANVAS_ID);
 
     createjs.Ticker.setFPS(30);
@@ -84,6 +106,9 @@ Pywars.Arena = new function () {
   this.addFighter = function (fighter) {
     var fighterAnimation = fighter.getAnimation();
     var player = fighter.order;
+
+    $('.canvas-container .player-' + player + ' .name').text(fighter.playerName);
+
     fighterAnimation.x = START_POSITION[player].x;
     fighterAnimation.y = START_POSITION[player].y;
     stage.addChild(fighterAnimation);
@@ -92,6 +117,20 @@ Pywars.Arena = new function () {
   };
 
   this.play = function (scenario) {
+    var lastTick = 0;
+
+    for (var i in scenario) {
+      if (scenario.hasOwnProperty(i)){
+        lastTick = Math.max(parseInt(i), lastTick);
+      }
+    }
+
+    scenario.lastTick = lastTick;
+
+    if (newGame) {
+      showSplash()
+    }
+
     initTimer(scenario);
   };
 
