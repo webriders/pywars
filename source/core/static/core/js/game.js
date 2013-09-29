@@ -21,6 +21,9 @@ pywars.game = {
         this.state = 'waiting';
         this.lastRound = 0;
 
+        this.current_round = 0;
+        this.submitted_round = 0;
+
         var self = this;
 
         this.initArena();
@@ -58,9 +61,6 @@ pywars.game = {
             self.player1 = data.players[0]
             self.player2 = data.players[1];
 
-            if(data.round != self.submitted_round)
-                self.enableCodeform();
-
             if (self.lastRound != data.round) {
                 self.renderRound(data.round);
             }
@@ -79,6 +79,16 @@ pywars.game = {
 
                 }
             }
+
+            if(data.round != self.submitted_round && self.isRendering == false) {
+                console.log(self.isRendering)
+                self.enableCodeform();
+            }
+            if(data.round != self.current_round && data.round !=0 && self.isRendering == false) {
+                pywars.messages.info('Round ' + data.round + ' started');
+                self.current_round = data.round;
+            }
+
         });
     },
 
@@ -93,7 +103,9 @@ pywars.game = {
         pywars.Arena.addFighter(f2);
         pywars.Arena.addFighter(f1);
 
-        $('#stage').on('scenarios.end', function(){ self.isRendering = false; });
+        $('#stage').on('scenarios.end', function(){
+            self.isRendering = false;
+        });
     },
 
     startGame: function() {
