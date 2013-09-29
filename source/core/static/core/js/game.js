@@ -128,15 +128,28 @@ pywars.game = {
     },
 
     finishGame: function(winner) {
+        var self = this;
+
         this.gameField.addClass('readonly');
 
         var winnerMessageBlock = this.gameField.find('.game-winner'),
-            winnerMessage = winnerMessageBlock.find('.message');
+            winnerMessage = winnerMessageBlock.find('.message .placeholder');
 
-        if (winner)
+        if (winner) {
+            if((self.userRole == 'player1' && winner == self.player1) || (self.userRole == 'player2' && winner == self.player2))
+                $('.share-message.winner').show();
+            else if(self.userRole != 'observer')
+                $('.share-message.looser').show();
+            else
+                $('.share-message.observer').show();
+
             winnerMessage.text(winnerMessage.text().replace('username', winner));
-        else
+        }
+        else {
             winnerMessage.text("Seems like you both are good enough. Tie!");
+            $('.share-message.observer').show();
+        }
+
 
         winnerMessageBlock.fadeIn(400, function() {
             $(window).trigger('resize');

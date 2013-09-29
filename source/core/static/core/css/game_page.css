@@ -55,6 +55,15 @@
     text-align: center;
 }
 
+.game-field .game-winner .join-game-form {
+    margin-top: 15px;
+}
+
+.game-field .game-winner .share-message {
+    display: none;
+    margin-bottom: 5px;
+}
+
 .game-field .game-editor {
     float: left;
     position: relative;
