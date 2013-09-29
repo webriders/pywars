@@ -14,24 +14,30 @@ pywars.Arena = new function () {
   var $pl1health;
   var $pl2health;
   var $canvas;
-
+  var scenarios = [];
   var newGame = true;
 
 
-  function initTimer(scenario) {
+  function initTimer() {
+    var scenario = scenarios.shift();
     if (timer) {
       clearInterval(timer);
       step = 0;
     }
 
     timer = setInterval(function () {
-      onTick(scenario,step);
+      onTick(scenario, step);
       step += 1;
 
       if (step > scenario.lastTick) {
-        $canvas.trigger('scenario.end');
-        clearInterval(timer);
         step = 0;
+        if (scenarios.length > 0) {
+          $canvas.trigger('scenario.end');
+          scenario = scenarios.shift();
+        } else {
+          $canvas.trigger('scenarios.end');
+          clearInterval(timer);
+        }
       }
 
     }, TICKER_DELAY)
@@ -45,7 +51,7 @@ pywars.Arena = new function () {
     stage.update(event);
   }
 
-  function onTick(scenario,step) {
+  function onTick(scenario, step) {
     var currentStep = scenario[step];
     if (currentStep) {
       for (var i = 0; i < currentStep.length; i++) {
@@ -75,12 +81,12 @@ pywars.Arena = new function () {
   function showSplash() {
     var fight = createjs.Sound.play("fight");
     fight.volume = 1;
-    setTimeout(function(){
+    setTimeout(function () {
       $('.canvas-container').append('<img src="/static/core/assets/fight.gif" class="fight" />');
     }, 300);
-    setTimeout(function(){
+    setTimeout(function () {
       $('.canvas-container .fight').remove()
-    },1300);
+    }, 1300);
     newGame = false;
   }
 
@@ -88,12 +94,12 @@ pywars.Arena = new function () {
     var $canvasContainer = $canvas.parents('.game-player');
     var width = $canvasContainer.width();
     var height = $canvasContainer.height();
-    $canvas.get(0).width =  width;
-    $canvas.get(0).height =  height;
+    $canvas.get(0).width = width;
+    $canvas.get(0).height = height;
 
     START_POSITION = {
       "1": {x: width / 2 - 70, y: height / 2 + 50},
-      "2": {x:  width / 2 - 40, y: height / 2 + 50}
+      "2": {x: width / 2 - 40, y: height / 2 + 50}
     };
   }
 
@@ -131,20 +137,23 @@ pywars.Arena = new function () {
     var lastTick = 0;
 
     for (var i in scenario) {
-      if (scenario.hasOwnProperty(i)){
+      if (scenario.hasOwnProperty(i)) {
         lastTick = Math.max(parseInt(i), lastTick);
       }
     }
 
     scenario.lastTick = lastTick;
 
-    if (newGame) {
-      showSplash()
-    }
+    scenarios.push(scenario);
 
-    setTimeout(function(){
-      initTimer(scenario);
-    }, 1000)
+    if (newGame) {
+      showSplash();
+      setTimeout(function () {
+        initTimer();
+      }, 1000);
+    } else if (!timer) {
+      initTimer();
+    }
   };
 
 
