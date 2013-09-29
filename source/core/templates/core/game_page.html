@@ -4,7 +4,7 @@
 {% load i18n %}
 {% load widget_tweaks %}
 
-{% block page_class %}game-page {% if game.is_started and user_role != game.ROLE_OBSERVER %}started{% endif %}{% endblock %}
+{% block page_class %}game-page {% if game.is_started %}started{% endif %}{% endblock %}
 
 {% block static %}
     {{ block.super }}
@@ -28,28 +28,22 @@
 {% endblock %}
 
 {% block content %}
-    <form id="join-game-form" class="join-game-form" method="post" action="{% url 'core-join-game-action' game.pk %}">
+    <section id="game-message" class="game-message">
         {% if user_role == game.ROLE_PLAYER_1 %}
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
-            <div class="join-message">{% trans "Share link to this game with your oponent" %}</div>
-            <div class="username-field">
-                <input type="text" value="http://{{ request.META.HTTP_HOST }}{{ request.path }}" onclick="$(this).select()" />
+            <p>{% trans "Share link to this game with your oponent" %}</p>
+            <div class="join-game-form">
+                <div class="username-field">
+                    <input type="text" value="http://{{ request.META.HTTP_HOST }}{{ request.path }}" onclick="$(this).select()" />
+                </div>
             </div>
         {% elif user_role == game.ROLE_PLAYER_2 %}
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
-            {% csrf_token %}
-            {% render_field join_game_form.game %}
-            <div class="username-field">
-                {{ join_game_form.game }}
-                {% render_field join_game_form.player_username placeholder="Enter your nickname" autofocus="true" %}
-            </div>
-            <input class="button" type="submit" value="Join game" />
-        {% else %}
-            {% trans "Sorry but game has already started" %}
+            {% include 'core/includes/join_game_form.html' with form=join_game_form button_title="Join game" %}
         {% endif %}
-    </form>
+    </section>
 
-    <section id="game-field" class="game-field">
+    <section id="game-field" class="game-field {% if game.is_finished or user_role == game.ROLE_OBSERVER %}readonly{% endif %}">
         <form class="game-editor" id="code-form">
             {% csrf_token %}
             <textarea id="code-editor" name="code"></textarea>
@@ -78,6 +72,9 @@
                 </div>
                 <canvas id="stage"></canvas>
             </div>
+        </div>
+        <div class="game-winner">
+            <div class="message">username wins!</div>
         </div>
     </section>
 {% endblock %}
