@@ -1,5 +1,4 @@
 import json
-import types
 from emulator.rules import Action, InitialAction
 
 
@@ -74,6 +73,10 @@ class PlayerState(object):
         self.health = self._queued_health = self.health - value
 
     def queue_energy(self, value):
+        """
+        Tell to change energy value
+        :param value: next value of energy
+        """
         assert type(value) is int
 
         if value > 100:
@@ -95,7 +98,7 @@ class PlayerState(object):
 
     def finish(self):
         """
-        Perform all queued operations
+        Emit events for all queued operations
         """
         if self._queued_health is not None:
             if self._health_callback is not None:
