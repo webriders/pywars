@@ -118,7 +118,10 @@ class Game(models.Model):
         if not self.is_started():
             raise GameException('Game is not started')
 
-        return self.rounds.filter(state__isnull=False).order_by('-number')[0]
+        try:
+            return self.rounds.filter(scene__isnull=False).order_by('-number')[0]
+        except IndexError:
+            return None
 
     def submit_code(self, player_id, code):
         """
@@ -198,7 +201,7 @@ class GameSnippet(models.Model):
 @transaction.commit_on_success
 def emulate_round(sender, **kwargs):
     """
-    Emulate code if all snippets for round was submitted
+    Emulate code if all snippets for round were submitted
     """
     game_round = kwargs['instance'].game_round
     game = game_round.game
@@ -207,13 +210,15 @@ def emulate_round(sender, **kwargs):
         service = EmulatorService()
 
         player1 = game.get_player_1()
-        player1_code = game_round.snippets.get(player=player1)
+        player1_code = game_round.snippets.get(player=player1).code
 
         player2 = game.get_player_2()
-        player2_code = game_round.snippets.get(player=player2)
+        player2_code = game_round.snippets.get(player=player2).code
 
+        print 'here'
         game_round.scene, player1.state, player2.state, winner = \
-            service.emulate(player1_code, player2_code, player1.state, player2.state)
+            service.emulate(player1_code, player2_code)
+        print game_round.scene
 
         if winner > 0 or game_round.number >= Game.MAX_ROUNDS_COUNT:
             if winner == 1:

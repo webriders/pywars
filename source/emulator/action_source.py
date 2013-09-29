@@ -11,7 +11,8 @@ class SimpleActionSource(object):
 
     def _generator(self):
         for string in self.code.split('\n'):
-            string.strip()
+            print 'executing %s' % string
+            string = string.strip()
             if string == 'kick()':
                 yield KickingAction()
             elif string == 'punch()':
@@ -20,6 +21,8 @@ class SimpleActionSource(object):
                 yield BlockingAction()
             elif string == 'wait()':
                 yield WaitingAction()
+            else:
+                print 'unknown action'
 
     def next(self):
         return self._generator_instance.next()

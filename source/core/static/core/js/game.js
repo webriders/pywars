@@ -4,6 +4,7 @@ pywars = window.pywars || {};
 pywars.game = {
     stateUrl: '', // will be defined inside template
     submitCodeUrl: '',
+    newRoundsUrl: '',
 
     init: function() {
         this.joinForm = $("#join-game-form");
@@ -62,10 +63,21 @@ pywars.game = {
         });
     },
 
+    initArena: function() {
+        var f1 = new pywars.Fighter('scorpion', 1);
+        var f2 = new pywars.Fighter('scorpion', 2);
+
+        pywars.Arena.initStage();
+
+        pywars.Arena.addFighter(f2);
+        pywars.Arena.addFighter(f1);
+    },
+
     startGame: function() {
         this.joinForm.hide();
         this.gameField.fadeIn();
         this.codeEditor.refresh();
+        this.initArena();
     },
 
     joinGame: function() {
@@ -78,6 +90,18 @@ pywars.game = {
     },
 
     renderRound: function(roundNumber) {
+        var self = this;
+
+        var url = this.newRoundsUrl.replace('0', this.lastRound.toString());
+        self.lastRound = roundNumber;
+
+        $.get(url, {}, function(data) {
+
+                var round = data[0];
+                console.log(round)
+                pywars.Arena.play($.parseJSON(round['scene']));
+
+        });
     },
 
     finishGame: function() {
