@@ -1,5 +1,6 @@
 var pywars = pywars || {};
 pywars.Arena = new function () {
+  var self = this;
   var CANVAS_ID = 'stage';
   var START_POSITION = {
     "1": {x: 250, y: 210},
@@ -16,7 +17,21 @@ pywars.Arena = new function () {
   var $canvas;
   var scenarios = [];
   var newGame = true;
-
+  var manifest = [
+    {id: "fight", src: "/static/core/assets/sounds/fight.wav", type: createjs.LoadQueue.SOUND},
+    {id: "punch", src: "/static/core/assets/sounds/punch.wav", type: createjs.LoadQueue.SOUND},
+    {id: "kick", src: "/static/core/assets/sounds/kick.wav", type: createjs.LoadQueue.SOUND},
+    {id: "splash", src: "/static/core/assets/fight.gif"}
+  ];
+  var queue = new createjs.LoadQueue(true);
+  queue.installPlugin(createjs.Sound);
+  queue.loadManifest(manifest);
+  queue.addedHandler = false;
+  queue.addEventListener("complete", function(){
+    createjs.Sound.registerSound(queue.getItem("fight"));
+    createjs.Sound.registerSound(queue.getItem("punch"));
+    createjs.Sound.registerSound(queue.getItem("kick"));
+  })
 
   function initTimer() {
     var scenario = scenarios.shift();
@@ -117,9 +132,6 @@ pywars.Arena = new function () {
     createjs.Ticker.useRAF = true;
     createjs.Ticker.addEventListener("tick", updateStage);
 
-    createjs.Sound.registerSound("/static/core/assets/sounds/fight.wav", "fight");
-    createjs.Sound.registerSound("/static/core/assets/sounds/punch.wav", "punch");
-    createjs.Sound.registerSound("/static/core/assets/sounds/kick.wav", "kick");
   };
 
   this.addFighter = function (fighter) {
@@ -136,24 +148,36 @@ pywars.Arena = new function () {
   };
 
   this.play = function (scenario) {
-    var lastTick = 0;
-
-    for (var i in scenario) {
-      if (scenario.hasOwnProperty(i)) {
-        lastTick = Math.max(parseInt(i), lastTick);
+    if (scenario) {
+      var lastTick = 0;
+      for (var i in scenario) {
+        if (scenario.hasOwnProperty(i)) {
+          lastTick = Math.max(parseInt(i), lastTick);
+        }
       }
+      scenario.lastTick = lastTick;
+      scenarios.push(scenario);
     }
 
-    scenario.lastTick = lastTick;
-
-    scenarios.push(scenario);
+    if (!queue.loaded && !queue.addedHandler) {
+      queue.addEventListener("complete", function(){
+        setTimeout(function(){
+          self.play()
+        }, 500)
+      });
+      queue.addedHandler = true;
+      return;
+    } else if (queue.addedHandler && !queue.loaded) {
+      return
+    }
 
     if (newGame) {
       showSplash();
       setTimeout(function () {
         initTimer();
       }, 1000);
-    } else if (!timer) {
+      timer = 'notnull'
+    } else if (timer === null) {
       initTimer();
     }
   };
