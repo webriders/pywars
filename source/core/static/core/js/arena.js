@@ -22,6 +22,7 @@ pywars.Arena = new function () {
     var scenario = scenarios.shift();
     if (timer) {
       clearInterval(timer);
+      timer = null;
       step = 0;
     }
 
@@ -37,6 +38,7 @@ pywars.Arena = new function () {
         } else {
           $canvas.trigger('scenarios.end');
           clearInterval(timer);
+          timer = null;
         }
       }
 

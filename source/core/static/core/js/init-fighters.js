@@ -7,8 +7,15 @@ $(function(){
   pywars.Arena.addFighter(f1);
 
   setTimeout(function(){
-    pywars.Arena.play(SCENARIO)
+    pywars.Arena.play(jQuery.extend({},SCENARIO))
+
+
+
   }, 1000);
+
+  setTimeout(function(){
+    pywars.Arena.play(jQuery.extend({},SCENARIO))
+}, 7000);
 
   $('#stage').on('scenario.end', function(){
   })
