@@ -27,7 +27,7 @@ pywars.Arena = new function () {
   queue.installPlugin(createjs.Sound);
   queue.loadManifest(manifest);
   queue.addedHandler = false;
-  queue.addEventListener("complete", function(){
+  queue.addEventListener("complete", function () {
     createjs.Sound.registerSound(queue.getItem("fight"));
     createjs.Sound.registerSound(queue.getItem("punch"));
     createjs.Sound.registerSound(queue.getItem("kick"));
@@ -93,7 +93,7 @@ pywars.Arena = new function () {
       $pl1.find('.health div').css('width', event.player1 + '%');
       $pl2.find('.health div').css('width', event.player2 + '%');
     },
-    'energy': function(event) {
+    'energy': function (event) {
       $pl1.find('.energy div').css('width', event.player1 + '%');
       $pl2.find('.energy div').css('width', event.player2 + '%');
     }
@@ -147,8 +147,13 @@ pywars.Arena = new function () {
     fighterAnimation.x = START_POSITION[player].x;
     fighterAnimation.y = START_POSITION[player].y;
     stage.addChild(fighterAnimation);
+
+
     players[player] = fighter;
     fighter.setState('waiting');
+    if (player == 2) {
+      fighterAnimation.currentAnimationFrame = 3;
+    }
   };
 
   this.play = function (scenario) {
@@ -164,8 +169,8 @@ pywars.Arena = new function () {
     }
 
     if (!queue.loaded && !queue.addedHandler) {
-      queue.addEventListener("complete", function(){
-        setTimeout(function(){
+      queue.addEventListener("complete", function () {
+        setTimeout(function () {
           self.play()
         }, 500)
       });
