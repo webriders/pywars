@@ -5,7 +5,7 @@ pywars.Arena = new function () {
     "1": {x: 250, y: 210},
     "2": {x: 300, y: 210}
   };
-  var TICKER_DELAY = 700;
+  var TICKER_DELAY = 900;
   var FPS = 10;
   var players = {};
   var stage;
