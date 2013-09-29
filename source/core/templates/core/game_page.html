@@ -36,6 +36,7 @@
             {% include 'core/includes/players.html' with player_1=game.get_player_1 player_2="..." %}
             {% csrf_token %}
             <div class="username-field">
+                {{ join_game_form.game }}
                 {% render_field join_game_form.player_username placeholder="Enter your nickname" autofocus="true" %}
             </div>
             <input class="button" type="submit" value="Join game" />
