@@ -10,16 +10,21 @@ class FightingRule(Rule):
     Simple rules for performing fighting operations
     """
     def resolve(self, player, enemy):
-        if isinstance(player.action, FightingAction) and player.action.tick == player.action.duration/2:
+        if isinstance(player.action, FightingAction):
             if isinstance(enemy.action, BlockingAction):
                 print '%s blocked hit' % enemy
                 return  # Enemy blocked hit
 
-            if isinstance(enemy.action, FightingAction) and enemy.action.tick == enemy.action.duration/2:
+            if isinstance(enemy.action, FightingAction):
                 print '%s was in the same fight state -> blocked' % enemy
                 return  # Enemy is in the same fighting state -> hit is blocked
 
             # Hit is not blocked
             print "%s received damage %d" % (enemy, player.action.damage)
-            enemy.queue_action(GettingHitAction())
+            if type(player.action) is PunchingAction:
+                enemy.queue_action(GettingHitByPunchAction())
+            elif type(player.action) is KickingAction:
+                enemy.queue_action(GettingHitByKickAction())
+            enemy.finish()
+
             enemy.queue_damage(player.action.damage)

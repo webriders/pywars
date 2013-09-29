@@ -24,21 +24,19 @@ class GameEmulator(object):
         self.tick = 0
 
         while self.tick < 1000:
-
+            # Perform tick
+            self.tick += 1
+            for player in self.players:
+                player.action.tick += 1
 
             # Perform all queued actions
             for player in self.players:
                 player.finish()
                 # Queue next action if player has finished action
-                if player.action.tick == player.action.duration:
+                if player.action.tick >= player.action.duration:
                     # Need to get next state
                     player.queue_action(player.action_source.next())
                     player.finish()
-
-            # Perform tick
-            self.tick += 1
-            for player in self.players:
-                player.action.tick += 1
 
             # Apply all rules for this tick
             for rule in self.rules:

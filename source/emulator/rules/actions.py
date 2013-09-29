@@ -12,13 +12,13 @@ class FightingAction(Action):
 
 class PunchingAction(FightingAction):
     name = 'punching'
-    duration = 4
+    duration = 1
     damage = 5
 
 
 class KickingAction(FightingAction):
     name = 'kicking'
-    duration = 4
+    duration = 1
     damage = 10
 
 
@@ -32,8 +32,13 @@ class WaitingAction(Action):
     duration = 1
 
 
-class GettingHitAction(Action):
-    name = 'being_hit'
+class GettingHitByPunchAction(Action):
+    name = 'being_hit_by_punch'
+    duration = 1
+
+
+class GettingHitByKickAction(Action):
+    name = 'being_hit_by_kick'
     duration = 1
 
 
