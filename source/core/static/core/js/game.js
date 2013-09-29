@@ -23,7 +23,7 @@ pywars.game = {
 
         this.currentRound = 0;
         this.submittedRound = 0;
-        this.opponentSubmitted = false;
+        this.opponentSubmittedShown = false;
 
         var self = this;
 
@@ -81,17 +81,17 @@ pywars.game = {
                 }
             }
 
-            if(data.round != self.submittedRound && self.isRendering == false) {
-                self.opponentSubmitted = false;
+            if(data.round != self.submittedRound && !self.isRendering) {
+                self.opponentSubmittedShown = false;
                 self.enableCodeForm();
             }
-            if(data.round != self.currentRound && data.round !=0 && self.isRendering == false) {
+            if(data.round != self.currentRound && data.round != 0 && !self.isRendering) {
                 pywars.messages.info('Round ' + (parseInt(data.round)+1) + ' started');
                 self.currentRound = data.round;
             }
 
-            if (self.opponentSubmitted != data.isOpponentSubmitted && data.isOpponentSubmitted == true && self.userRole != 'observer') {
-                self.opponentSubmitted = true;
+            if (!self.opponentSubmittedShown && data.isOpponentSubmitted && self.userRole != 'observer') {
+                self.opponentSubmittedShown = true;
                 pywars.messages.info('Opponent submitted code!');
             }
 
