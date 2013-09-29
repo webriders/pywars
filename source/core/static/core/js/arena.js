@@ -175,7 +175,7 @@ pywars.Arena = new function () {
       showSplash();
       setTimeout(function () {
         initTimer();
-      }, 1000);
+      }, 0);
       timer = 'notnull'
     } else if (timer === null) {
       initTimer();
