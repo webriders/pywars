@@ -5,6 +5,9 @@ $.noty.defaults.animation.speed = 200;
 $.noty.defaults.timeout = 2000;
 
 pywars.messages = {
+    info: function(message) {
+        noty({text: message, type: 'info'})
+    },
     error: function(message) {
         noty({text: message, type: 'error'})
     }
