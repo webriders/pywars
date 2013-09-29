@@ -114,7 +114,7 @@ pywars.game = {
     renderRound: function(roundNumber) {
         var self = this;
 
-        var url = this.newRoundsUrl.replace('0', this.lastRound.toString());
+        var url = this.newRoundsUrl.replace('/0/', '/'+this.lastRound.toString()+'/');
         self.lastRound = roundNumber;
         self.isRendering = true;
 
