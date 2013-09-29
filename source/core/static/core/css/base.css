@@ -62,3 +62,13 @@ input:focus {
 .page-footer .copyright {
     margin-top: 20px;
 }
+
+.page-content .players {
+    margin-top: 7%;
+}
+
+@media only screen and (max-height: 800px) {
+    .page-content .players {
+        margin-top: 0;
+    }
+}
