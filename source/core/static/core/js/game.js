@@ -9,6 +9,7 @@ pywars.game = {
     player2: 'player2',
 
     init: function() {
+        this.isRendering = false;
         this.joinForm = $("#join-game-form");
         this.codeForm = $("#code-form");
         this.gameField = $("#game-field");
@@ -19,6 +20,8 @@ pywars.game = {
         this.lastRound = 0;
 
         var self = this;
+
+        this.initArena();
         setInterval(function() { self.updateState() }, 3 * 1000);
         self.updateState();
 
@@ -29,11 +32,12 @@ pywars.game = {
 
         this.codeForm.submit(function(e) {
             e.preventDefault();
-            self.disableCodeForm();
+
             var code = self.codeEditor.getValue();
 
             $.post(self.submitCodeUrl, $(this).serialize(), function(data) {
-                console.log(data);
+                self.disableCodeForm();
+                self.submitted_round = self.lastRound;
             });
         });
     },
@@ -52,27 +56,34 @@ pywars.game = {
             self.player1 = data.player1_name;
             self.player2 = data.player2_name;
 
-            self.renderCode(data.current_code);
+            if(data.round != self.submitted_round)
+                self.enableCodeform();
+
+            if (self.lastRound != data.round) {
+                self.renderRound(data.round);
+            }
 
             if (data.state != self.state) {
                 switch (data.state) {
                     case 'round':
                         self.startGame();
+                        self.state = data.state;
                         break;
                     case 'finished':
-                        self.finishGame();
+                        console.log(self.isRendering)
+                        if(self.isRendering == false) {
+                            self.finishGame(); /* finish only after all rendering performed */
+                            self.state = data.state;
+                        }
+
                 }
             }
-
-            if (data.state == 'round' && self.lastRound != data.round) {
-                self.renderRound(data.round);
-            }
-
-            self.state = data.state;
         });
     },
 
     initArena: function() {
+        var self = this;
+
         var f1 = new pywars.Fighter(this.player1, 1);
         var f2 = new pywars.Fighter(this.player2, 2);
 
@@ -80,6 +91,8 @@ pywars.game = {
 
         pywars.Arena.addFighter(f2);
         pywars.Arena.addFighter(f1);
+
+        $('#stage').on('scenario.end', function(){ self.isRendering = false; });
     },
 
     startGame: function() {
@@ -103,27 +116,16 @@ pywars.game = {
 
         var url = this.newRoundsUrl.replace('0', this.lastRound.toString());
         self.lastRound = roundNumber;
+        self.isRendering = true;
 
         $.get(url, {}, function(data) {
             var round = data[0];
             pywars.Arena.play($.parseJSON(round['scene']));
-
         });
     },
 
     finishGame: function() {
         alert('game is finished');
-    },
-
-    renderCode: function(code) {
-        var self = this;
-
-        if(code == null)
-            self.enableCodeform();
-        else {
-            self.codeEditor.setValue(code);
-            self.disableCodeForm();
-        }
     },
 
     disableCodeForm: function() {
